@@ -23,6 +23,7 @@
 		limit={10}
 		label="Guess the country..."
 		on:select={({ detail }) => (guess = detail.original)}
+		inputAfterSelect="clear"
 	/>
 </div>
 

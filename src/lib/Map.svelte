@@ -1,15 +1,15 @@
 <script lang="ts">
 	import { Map, View } from 'ol';
-	import { boundingExtent, extend, type Extent } from 'ol/extent';
-	import GeoJSON from 'ol/format/GeoJSON';
-	import TileLayer from 'ol/layer/Tile';
-	import VectorLayer from 'ol/layer/Vector';
-	import { fromLonLat } from 'ol/proj';
-	import OSM from 'ol/source/OSM';
-	import VectorSource from 'ol/source/Vector';
-	import Fill from 'ol/style/Fill';
-	import Stroke from 'ol/style/Stroke';
-	import Style from 'ol/style/Style';
+	import { boundingExtent, extend, type Extent } from 'ol/extent.js';
+	import GeoJSON from 'ol/format/GeoJSON.js';
+	import TileLayer from 'ol/layer/Tile.js';
+	import VectorLayer from 'ol/layer/Vector.js';
+	import { fromLonLat } from 'ol/proj.js';
+	import OSM from 'ol/source/OSM.js';
+	import VectorSource from 'ol/source/Vector.js';
+	import Fill from 'ol/style/Fill.js';
+	import Stroke from 'ol/style/Stroke.js';
+	import Style from 'ol/style/Style.js';
 	import { onMount } from 'svelte';
 
 	let loading = true;
