@@ -4,8 +4,8 @@
 
 	type Country = { name: string; code: string };
 
-	export let data: Country[];
-	export let ctry: string;
+	export let countries: Country[];
+	export let ctryCode: string;
 
 	const extract = (ctry: Country) => ctry.name;
 
@@ -18,7 +18,7 @@
 
 <div class="z-50 py-2">
 	<Typeahead
-		{data}
+		data={countries}
 		{extract}
 		limit={10}
 		label="Guess the country..."
@@ -27,4 +27,4 @@
 	/>
 </div>
 
-<Map {ctry} bind:guess />
+<Map {ctryCode} bind:guess />

@@ -12,26 +12,25 @@
 	import Style from 'ol/style/Style.js';
 	import { onMount } from 'svelte';
 
-	let loading = true;
-	export let ctry: string;
+	export let ctryCode: string;
 	export let guess: { name: string; code: string };
 
 	const ctrySource = async (ctry: string) =>
-		fetch(`./api/${ctry}.geo.json`)
+		fetch(`./data/${ctry.toLowerCase()}.geo.json`)
 			.then((res) => res.text())
 			.then((text) => new GeoJSON().readFeatures(text, { featureProjection: 'EPSG:3857' }))
-			.then((features) => new VectorSource({ features }));
+			.then((features) => new VectorSource({ features, wrapX: false }));
 
+	let loading = true;
 	let map: Map;
 	let mainSource: VectorSource;
 	let mainExtent: Extent;
 
-	// const fill = new Fill({ color: 'rgb(248, 250, 252, 0.5)' });
 	const fill = new Fill({ color: 'rgb(100, 116, 139)' });
 	const stroke = new Stroke({ color: 'rgb(248 250 252)', width: 1.25 });
 
 	onMount(async () => {
-		mainSource = await ctrySource(ctry);
+		mainSource = await ctrySource(ctryCode);
 		mainExtent = mainSource.getExtent();
 		const layer = new VectorLayer({ source: mainSource, style: new Style({ fill, stroke }) });
 		const view = new View({ extent: mainExtent, showFullExtent: true });
@@ -41,7 +40,7 @@
 	});
 
 	$: if (guess) {
-		if (guess.code === ctry) {
+		if (guess.code === ctryCode) {
 			alert(`omg yass bro it's ${guess.name}`);
 			const osmLayer = new TileLayer({ source: new OSM(), opacity: 0.5 });
 			map.addLayer(osmLayer);

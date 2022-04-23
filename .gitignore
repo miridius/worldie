@@ -8,3 +8,6 @@ node_modules
 !.env.example
 .vercel
 .output
+
+# data from world-countries npm module, copied during postinstall script
+static/data/
