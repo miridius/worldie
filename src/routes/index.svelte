@@ -18,7 +18,7 @@
 	<title>Worldie</title>
 </svelte:head>
 
-<div class="p-2 flex gap-2 items-center z-50">
+<div class="p-2 flex gap-2 items-center">
 	<Typeahead
 		data={countries}
 		{extract}
