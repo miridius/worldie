@@ -18,18 +18,16 @@
 	<title>Worldie</title>
 </svelte:head>
 
-<div class="p-2 flex gap-2 items-center">
-	<div class="z-50">
-		<Typeahead
-			data={countries}
-			{extract}
-			limit={10}
-			label="Guess the country..."
-			on:select={({ detail }) => (guess = detail.original)}
-			inputAfterSelect="clear"
-			disabled={gameOver}
-		/>
-	</div>
+<div class="p-2 flex gap-2 items-center z-50">
+	<Typeahead
+		data={countries}
+		{extract}
+		limit={10}
+		label="Guess the country..."
+		on:select={({ detail }) => (guess = detail.original)}
+		inputAfterSelect="clear"
+		disabled={gameOver}
+	/>
 	<button
 		on:click={() => (giveUp = true)}
 		disabled={gameOver}
