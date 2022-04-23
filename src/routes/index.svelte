@@ -10,21 +10,32 @@
 	const extract = (ctry: Country) => ctry.name;
 
 	let guess: Country;
+	let giveUp = false;
+	$: gameOver = giveUp || guess?.code === ctryCode;
 </script>
 
 <svelte:head>
 	<title>Worldie</title>
 </svelte:head>
 
-<div class="z-50 py-2">
-	<Typeahead
-		data={countries}
-		{extract}
-		limit={10}
-		label="Guess the country..."
-		on:select={({ detail }) => (guess = detail.original)}
-		inputAfterSelect="clear"
-	/>
+<div class="p-2 flex gap-2 items-center">
+	<div class="z-50">
+		<Typeahead
+			data={countries}
+			{extract}
+			limit={10}
+			label="Guess the country..."
+			on:select={({ detail }) => (guess = detail.original)}
+			inputAfterSelect="clear"
+			disabled={gameOver}
+		/>
+	</div>
+	<button
+		on:click={() => (giveUp = true)}
+		disabled={gameOver}
+		class="inline-block p-2 bg-blue-500 text-xs leading-tight uppercase rounded shadow-md
+		hover:bg-blue-700 hover:shadow-lg focus-visible:ring-2 ring-white">Give up</button
+	>
 </div>
 
-<Map {ctryCode} bind:guess />
+<Map {ctryCode} {guess} {giveUp} />

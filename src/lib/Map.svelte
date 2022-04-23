@@ -14,6 +14,7 @@
 
 	export let ctryCode: string;
 	export let guess: { name: string; code: string };
+	export let giveUp = false;
 
 	const ctrySource = async (ctry: string) =>
 		fetch(`./data/${ctry.toLowerCase()}.geo.json`)
@@ -39,10 +40,14 @@
 		loading = false;
 	});
 
-	$: if (guess) {
-		if (guess.code === ctryCode) {
-			alert(`omg yass bro it's ${guess.name}`);
-			const osmLayer = new TileLayer({ source: new OSM(), opacity: 0.5 });
+	$: if (giveUp || guess) {
+		if (giveUp || guess.code === ctryCode) {
+			if (!giveUp) alert(`omg yass bro it's ${guess.name}`);
+			const osmLayer = new TileLayer({
+				source: new OSM({
+					url: 'https://tile.tracestrack.com/en-name/{z}/{x}/{y}.png?key=1c9009346d9c00c44c84ef373ba739a4',
+				}),
+			});
 			map.addLayer(osmLayer);
 			map.getView().fit(mainExtent, { duration: 1000 });
 			extend(mainExtent, boundingExtent([fromLonLat([-180, -180]), fromLonLat([180, 180])]));
@@ -62,7 +67,6 @@
 				})
 				.catch(alert);
 		}
-		guess = undefined;
 	}
 </script>
 
