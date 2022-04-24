@@ -3,13 +3,11 @@
 	export let guess: { name: string; code: string };
 	let loading = true;
 
-	// import { map, tileLayer } from 'leaflet';
-	import * as L from 'leaflet';
 	import { onMount } from 'svelte';
 
+	let L;
 	let map;
 	let ctryLayer;
-	let center;
 
 	const addCtryToMap = async (ctryCode: string, style = {}) => {
 		const res = await fetch(`./data/${ctryCode.toLowerCase()}.geo.json`);
@@ -20,9 +18,9 @@
 	};
 
 	onMount(async () => {
+		L = await import('leaflet');
 		map = L.map('map');
 		ctryLayer = await addCtryToMap(ctryCode);
-		center = ctryLayer.getBounds().getCenter();
 		map.fitBounds(ctryLayer.getBounds());
 		loading = false;
 	});
@@ -30,7 +28,8 @@
 	$: if (guess) {
 		if (guess.code === ctryCode) {
 			alert(`omg yass bro it's ${guess.name}`);
-			const layer = L.tileLayer(
+			ctryLayer.setStyle({ color: '#10b981' }).bindPopup(guess.name);
+			L.tileLayer(
 				'https://tile.tracestrack.com/en/{z}/{x}/{y}.png?key=1c9009346d9c00c44c84ef373ba739a4',
 				{ opacity: 0.5 },
 			).addTo(map);
@@ -49,10 +48,14 @@
 	}
 </script>
 
-<div class="h-full w-full flex justify-center items-center p-2 bg-transparent" id="map">
+<div class="h-full w-full flex justify-center items-center p-2" id="map">
 	{#if loading}<p class="text-slate-100">Loading map...</p>{/if}
 </div>
 
 <style>
 	@import 'leaflet/dist/leaflet.css';
+
+	#map {
+		@apply bg-slate-900;
+	}
 </style>
