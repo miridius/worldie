@@ -46,7 +46,6 @@
 				source: new OSM({
 					url: 'https://tile.tracestrack.com/en-name/{z}/{x}/{y}.png?key=1c9009346d9c00c44c84ef373ba739a4',
 				}),
-				opacity: 0.5,
 			});
 			map.addLayer(osmLayer);
 			map.getView().fit(mainExtent, { duration: 1000 });
