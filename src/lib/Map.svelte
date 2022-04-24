@@ -42,7 +42,12 @@
 	$: if (guess) {
 		if (guess.code === ctryCode) {
 			alert(`omg yass bro it's ${guess.name}`);
-			const osmLayer = new TileLayer({ source: new OSM(), opacity: 0.5 });
+			const osmLayer = new TileLayer({
+				source: new OSM({
+					url: 'https://tile.tracestrack.com/en-name/{z}/{x}/{y}.png?key=1c9009346d9c00c44c84ef373ba739a4',
+				}),
+				opacity: 0.5,
+			});
 			map.addLayer(osmLayer);
 			map.getView().fit(mainExtent, { duration: 1000 });
 			extend(mainExtent, boundingExtent([fromLonLat([-180, -180]), fromLonLat([180, 180])]));
