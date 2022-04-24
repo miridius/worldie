@@ -28,7 +28,7 @@
 	$: if (guess) {
 		if (guess.code === ctryCode) {
 			alert(`omg yass bro it's ${guess.name}`);
-			ctryLayer.setStyle({ color: '#10b981' }).bindPopup(guess.name);
+			ctryLayer.setStyle({ color: '#10b981' }).bringToFront().bindPopup(guess.name);
 			L.tileLayer(
 				'https://tile.tracestrack.com/en/{z}/{x}/{y}.png?key=1c9009346d9c00c44c84ef373ba739a4',
 				{ opacity: 0.5 },
@@ -40,7 +40,7 @@
 				map.flyToBounds(ctryLayer.getBounds().extend(layer.getBounds()));
 				map.once('moveend', async () => {
 					await new Promise((r) => setTimeout(r, 500));
-					map.flyToBounds(ctryLayer.getBounds().pad(1), 3, { duration: 2 });
+					map.flyToBounds(ctryLayer.getBounds().pad(0.5), undefined, { duration: 2 });
 				});
 			});
 		}
