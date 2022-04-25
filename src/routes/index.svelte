@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Map from '$lib/Map.svelte';
+	import Map from '$lib/map/Map.svelte';
 	import Typeahead from 'svelte-typeahead';
 
 	type Country = { name: string; code: string };
