@@ -9,7 +9,7 @@
 
 	const extract = (ctry: Country) => ctry.name;
 
-	let guess: Country;
+	let guess: Country | undefined;
 </script>
 
 <svelte:head>
@@ -29,7 +29,7 @@
 	/>
 </div>
 
-<style>
+<style lang="postcss">
 	/* move the results list above the input + make sure it appears in front of the map */
 	:global([data-svelte-typeahead] ul) {
 		@apply top-auto bottom-full z-[9999];

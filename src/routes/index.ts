@@ -1,5 +1,7 @@
 import type { RequestHandler } from '@sveltejs/kit';
-import countriesData from 'world-countries/dist/countries.json';
+import type { Countries } from 'world-countries';
+import _countriesData from 'world-countries/dist/countries.json';
+const countriesData = _countriesData as unknown as Countries;
 
 const useOfficialNames = new Set(['USA']);
 

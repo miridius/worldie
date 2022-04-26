@@ -7,7 +7,7 @@
 	import Map from './map';
 
 	export let ctryCode: string;
-	export let guess: { name: string; code: string };
+	export let guess: { name: string; code: string } | undefined;
 
 	const id = `map-${nextId++}`;
 

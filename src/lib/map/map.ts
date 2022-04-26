@@ -4,8 +4,8 @@ import type { Map as LeafletMap, GeoJSON } from 'leaflet';
 let L: typeof import('leaflet/index');
 
 export default class Map {
-	map: LeafletMap;
-	targetCtry: GeoJSON;
+	map!: LeafletMap;
+	targetCtry!: GeoJSON;
 
 	// this logic can't be in the constructor because it is async
 	async init(elementId: string, targetCtryCode: string) {
@@ -18,7 +18,7 @@ export default class Map {
 
 	showWin(ctryName: string) {
 		this.showFullMap();
-		this.targetCtry.setStyle({ color: '#10b981' }).bringToFront().bindPopup(ctryName);
+		this.targetCtry?.setStyle({ color: '#10b981' }).bringToFront().bindPopup(ctryName);
 	}
 
 	async showWrongGuess(ctryCode: string, ctryName: string) {
