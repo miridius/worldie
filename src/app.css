@@ -1,5 +1,7 @@
 /* Write your global styles here, in PostCSS syntax */
 
+@import 'leaflet/dist/leaflet.css';
+
 @tailwind base;
 
 @tailwind components;
