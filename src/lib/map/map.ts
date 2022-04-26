@@ -10,7 +10,7 @@ export default class Map {
 	// this logic can't be in the constructor because it is async
 	async init(elementId: string, targetCtryCode: string) {
 		if (!L) L = await import('leaflet');
-		this.map = L.map(elementId);
+		this.map = L.map(elementId, { attributionControl: false, zoomSnap: 0.1 });
 		this.targetCtry = await this.addCtry(targetCtryCode);
 		this.map.fitBounds(this.targetCtry.getBounds());
 		return this;
@@ -22,18 +22,19 @@ export default class Map {
 	}
 
 	async showWrongGuess(ctryCode: string, ctryName: string) {
-		const layer = await this.addCtry(ctryCode, '#ef4444');
-		layer.bindPopup(ctryName);
+		const layer = (await this.addCtry(ctryCode, '#ef4444')).bindPopup(ctryName);
+		this.targetCtry.bringToFront();
 		this.map.flyToBounds(this.targetCtry.getBounds().extend(layer.getBounds()));
 		this.map.once('moveend', async () => {
 			await new Promise((r) => setTimeout(r, 1000));
-			this.map.flyToBounds(this.targetCtry.getBounds().pad(0.5), { duration: 2 });
+			this.map.flyToBounds(this.targetCtry.getBounds().pad(0.5));
 		});
 	}
 
 	private async addCtry(ctryCode: string, color = '#f8fafc') {
-		const res = await fetch(`./data/${ctryCode.toLowerCase()}.geo.json`);
-		const data = await res.json();
+		const data = await fetch(`./data/${ctryCode.toLowerCase()}.geo.json`)
+			.then((res) => res.json())
+			.catch(alert);
 		return L.geoJSON(data, { style: { weight: 2, color } }).addTo(this.map);
 	}
 

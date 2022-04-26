@@ -21,7 +21,6 @@
 
 	$: if (guess) {
 		if (guess.code === ctryCode) {
-			alert(`omg yass bro it's ${guess.name}`);
 			map.showWin(guess.name);
 		} else {
 			map.showWrongGuess(guess.code, guess.name);
