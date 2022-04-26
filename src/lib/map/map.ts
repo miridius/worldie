@@ -39,6 +39,8 @@ export default class Map {
 	}
 
 	private showFullMap() {
+		this.map.setMinZoom(3);
+		this.map.setView(this.targetCtry.getBounds().getCenter(), Math.max(3, this.map.getZoom()));
 		L.tileLayer(
 			'https://tile.tracestrack.com/en/{z}/{x}/{y}.png?key=1c9009346d9c00c44c84ef373ba739a4',
 			{ opacity: 0.5 },
