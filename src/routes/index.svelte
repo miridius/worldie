@@ -16,15 +16,27 @@
 	<title>Worldie</title>
 </svelte:head>
 
-<div class="z-50 py-2">
+<Map {ctryCode} bind:guess />
+
+<div class="p-2.5">
 	<Typeahead
 		data={countries}
 		{extract}
 		limit={10}
-		label="Guess the country..."
+		placeholder="Guess the country..."
 		on:select={({ detail }) => (guess = detail.original)}
 		inputAfterSelect="clear"
 	/>
 </div>
 
-<Map {ctryCode} bind:guess />
+<style>
+	/* move the results list above the input + make sure it appears in front of the map */
+	:global([data-svelte-typeahead] ul) {
+		@apply top-auto bottom-full z-[9999];
+	}
+
+	/* hide the typeahead label */
+	:global([data-svelte-search] label) {
+		@apply hidden;
+	}
+</style>
