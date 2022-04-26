@@ -18,7 +18,7 @@
 
 <Map {ctryCode} bind:guess />
 
-<div class="p-2.5">
+<div class="p-3 w-full max-w-sm">
 	<Typeahead
 		data={countries}
 		{extract}
