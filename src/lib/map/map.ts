@@ -1,5 +1,10 @@
 import type { Map as LeafletMap, GeoJSON } from 'leaflet';
-import colors from 'tailwindcss/colors';
+
+const colors = {
+	sky: { '500': '#0ea5e9' },
+	red: { '500': '#ef4444' },
+	emerald: { '500': '#10b981' },
+};
 
 // this needs to be imported dynamically because it crashes if imported on the server
 let L: typeof import('leaflet/index');
@@ -12,7 +17,7 @@ export default class Map {
 	async init(elementId: string, targetCtryCode: string) {
 		if (!L) L = await import('leaflet');
 		this.map = L.map(elementId, { attributionControl: false, zoomSnap: 0.1 });
-		this.targetCtry = await this.addCtry(targetCtryCode, colors.blue['500']);
+		this.targetCtry = await this.addCtry(targetCtryCode, colors.sky['500']);
 		this.map.fitBounds(this.targetCtry.getBounds().pad(0.1));
 		return this;
 	}
