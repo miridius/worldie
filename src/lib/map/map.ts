@@ -1,4 +1,5 @@
 import type { Map as LeafletMap, GeoJSON } from 'leaflet';
+import colors from 'tailwindcss/colors';
 
 // this needs to be imported dynamically because it crashes if imported on the server
 let L: typeof import('leaflet/index');
@@ -11,31 +12,31 @@ export default class Map {
 	async init(elementId: string, targetCtryCode: string) {
 		if (!L) L = await import('leaflet');
 		this.map = L.map(elementId, { attributionControl: false, zoomSnap: 0.1 });
-		this.targetCtry = await this.addCtry(targetCtryCode);
-		this.map.fitBounds(this.targetCtry.getBounds());
+		this.targetCtry = await this.addCtry(targetCtryCode, colors.blue['500']);
+		this.map.fitBounds(this.targetCtry.getBounds().pad(0.1));
 		return this;
+	}
+
+	private async addCtry(ctryCode: string, color: string) {
+		const data = await fetch(`./data/${ctryCode.toLowerCase()}.geo.json`)
+			.then((res) => res.json())
+			.catch(alert);
+		return L.geoJSON(data, { style: { weight: 4, color, fill: false } }).addTo(this.map);
+	}
+
+	async showWrongGuess(ctryCode: string, ctryName: string) {
+		const layer = (await this.addCtry(ctryCode, colors.red['500'])).bindPopup(ctryName);
+		this.map.flyToBounds(this.targetCtry.getBounds().extend(layer.getBounds()), { duration: 1.5 });
+		this.map.once('moveend', async () => {
+			await new Promise((r) => setTimeout(r, 1500));
+			this.targetCtry.bringToFront();
+			this.map.flyToBounds(this.targetCtry.getBounds().pad(0.5), { duration: 1.5 });
+		});
 	}
 
 	showWin(ctryName: string) {
 		this.showFullMap();
 		this.targetCtry?.setStyle({ color: '#10b981' }).bringToFront().bindPopup(ctryName);
-	}
-
-	async showWrongGuess(ctryCode: string, ctryName: string) {
-		const layer = (await this.addCtry(ctryCode, '#ef4444')).bindPopup(ctryName);
-		this.targetCtry.bringToFront();
-		this.map.flyToBounds(this.targetCtry.getBounds().extend(layer.getBounds()));
-		this.map.once('moveend', async () => {
-			await new Promise((r) => setTimeout(r, 1000));
-			this.map.flyToBounds(this.targetCtry.getBounds().pad(0.5));
-		});
-	}
-
-	private async addCtry(ctryCode: string, color = '#f8fafc') {
-		const data = await fetch(`./data/${ctryCode.toLowerCase()}.geo.json`)
-			.then((res) => res.json())
-			.catch(alert);
-		return L.geoJSON(data, { style: { weight: 2, color } }).addTo(this.map);
 	}
 
 	private showFullMap() {

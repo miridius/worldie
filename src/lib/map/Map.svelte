@@ -29,6 +29,6 @@
 	}
 </script>
 
-<div class="h-full w-full flex justify-center items-center p-2 bg-slate-900" {id}>
-	{#if loading}<p class="text-slate-100">Loading map...</p>{/if}
+<div class="h-full w-full flex justify-center items-center p-2 bg-transparent" {id}>
+	{#if loading}<p class="text-xl">Loading map...</p>{/if}
 </div>
