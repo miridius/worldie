@@ -4,8 +4,14 @@
 
 	export let countries: Country[];
 	export let guess: Country | undefined;
-	export let disabled = false;
-	export let message: string;
+	export let gameOver: boolean;
+	export let won: boolean;
+
+	$: label = gameOver
+		? won
+			? 'You guessed it!'
+			: 'Better luck next time!'
+		: 'Guess the country...';
 
 	const extract = (ctry: Country) => ctry.name;
 </script>
@@ -15,11 +21,11 @@
 		data={countries}
 		{extract}
 		limit={10}
-		label={message}
-		placeholder={message}
+		{label}
+		placeholder={label}
 		on:select={({ detail }) => (guess = detail.original)}
 		inputAfterSelect="clear"
-		{disabled}
+		disabled={gameOver}
 	/>
 </div>
 

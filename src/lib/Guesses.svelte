@@ -8,8 +8,8 @@
 	export let current: number;
 	export let selected: number;
 
-	const getButtonBg = (g?: Guess) => {
-		if (!g) return 'bg-white';
+	const getButtonBg = (g: Guess | undefined, index: number) => {
+		if (!g) return index === current ? 'bg-blue-500' : 'bg-white';
 		if (g.correct) return 'bg-green-500';
 		if (g.close) return 'bg-yellow-500';
 		return 'bg-red-500';
@@ -21,10 +21,10 @@
 <section class="px-6 py-3 w-full max-w-sm flex justify-around gap-2">
 	{#each guesses as guess, i}
 		<button
-			class={`h-8 w-8 rounded-md border-gray-800 ${getButtonBg(guess)}`}
+			class={`h-8 w-8 rounded-md border-gray-800 ${getButtonBg(guess, i)}`}
 			class:border-4={i === selected}
-			class:bg-blue-500={i === current}
 			on:click={() => (selected = i)}
+			disabled={i > current}
 		>
 			{guess?.name.charAt(0) || ' '}
 		</button>
