@@ -39,5 +39,7 @@
 
 	<CountrySearch {countries} bind:guess {gameOver} {won} />
 
-	<Guesses {guesses} {current} bind:selected />
+	<footer class="w-100 flex justify-center items-center portrait:flex-col">
+		<Guesses {guesses} {current} bind:selected />
+	</footer>
 </main>

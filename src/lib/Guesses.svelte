@@ -31,11 +31,9 @@
 	{/each}
 </section>
 
-{#if current > 0}
-	<button class="w-10 text-gray-700" on:click={() => (open = true)}>
-		<UpIcon />
-	</button>
-{/if}
+<button class="w-10 text-gray-700" on:click={() => (open = true)}>
+	<UpIcon />
+</button>
 
 {#if open}
 	<section
@@ -48,17 +46,8 @@
 		</button>
 		<ol class="list-decimal pb-3">
 			{#each guesses.filter((g) => g) as guess}
-				<li>{guess?.correct ? '✔' : '❌'} {guess?.name || '...'}</li>
+				<li>{guess?.correct ? '✔' : '❌'} {guess?.name}</li>
 			{/each}
 		</ol>
 	</section>
 {/if}
-
-<style lang="postcss">
-	@media screen and (max-height: 500px) {
-		section,
-		button {
-			@apply hidden;
-		}
-	}
-</style>
