@@ -20,18 +20,25 @@ const PAUSE_MS = 1500;
 // this needs to be imported dynamically because it crashes if imported on the server
 let L: typeof import('leaflet/index');
 
+type Country = { layer: GeoJSON; marker: Marker };
+
 export default class Map {
 	map!: LeafletMap;
-	targetCtry!: GeoJSON;
-	guesses: { layer: GeoJSON; marker: Marker }[] = [];
+	targetCtry!: Country;
+	guesses: Country[] = [];
 
 	// this logic can't be in the constructor because it is async
 	async init(elementId: string, targetCtryCode: string) {
 		if (!L) L = await import('leaflet');
 		this.map = L.map(elementId, { attributionControl: false, zoomSnap: 0.1 });
-		this.targetCtry = await this.addCtry(targetCtryCode, colors.sky['500']);
-		this.map.fitBounds(this.targetCtry.getBounds().pad(0.1));
+		const layer = await this.addCtry(targetCtryCode, colors.sky['500']);
+		this.targetCtry = { layer, marker: this.addMarker(layer, '?') };
+		this.map.fitBounds(this.targetBounds.pad(0.1));
 		return this;
+	}
+
+	get targetBounds() {
+		return this.targetCtry.layer.getBounds();
 	}
 
 	private async addCtry(ctryCode: string, color: string) {
@@ -53,7 +60,8 @@ export default class Map {
 	async showGuess(index: number): Promise<void> {
 		const guess = this.guesses[index];
 		if (guess) {
-			await this.fly(this.targetCtry.getBounds().extend(guess.layer.getBounds()));
+			this.targetCtry.marker.closeTooltip();
+			await this.fly(this.targetBounds.extend(guess.layer.getBounds()));
 			guess.marker.openTooltip();
 		} else {
 			this.showTarget();
@@ -61,9 +69,10 @@ export default class Map {
 	}
 
 	async showTarget(): Promise<void> {
-		this.targetCtry.bringToFront();
+		this.targetCtry.layer.bringToFront();
 		this.hideAllTooltips();
-		await this.fly(this.targetCtry.getBounds().pad(0.5));
+		await this.fly(this.targetBounds.pad(0.5));
+		this.targetCtry.marker.openTooltip();
 	}
 
 	private fly(bounds: LatLngBounds, options: FitBoundsOptions = {}): Promise<void> {
@@ -84,16 +93,17 @@ export default class Map {
 	}
 
 	showWin() {
-		this.targetCtry?.setStyle({ color: '#10b981' }).bringToFront();
+		this.targetCtry?.layer.setStyle({ color: '#10b981' }).bringToFront();
 	}
 
 	gameOver() {
 		this.showFullMap();
+		this.targetCtry.marker.unbindTooltip();
 	}
 
 	private showFullMap() {
 		this.map.setMinZoom(3);
-		this.map.setView(this.targetCtry.getBounds().getCenter(), Math.max(3, this.map.getZoom()));
+		this.map.setView(this.targetBounds.getCenter(), Math.max(3, this.map.getZoom()));
 		L.tileLayer(
 			'https://tile.tracestrack.com/en/{z}/{x}/{y}.png?key=1c9009346d9c00c44c84ef373ba739a4',
 			{ opacity: 0.5 },

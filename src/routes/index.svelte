@@ -16,6 +16,11 @@
 	let selected = 0;
 	let won = false;
 	$: gameOver = won || current >= MAX_GUESSES;
+	$: message = gameOver
+		? won
+			? 'You guessed it!'
+			: 'Better luck next time'
+		: 'Guess the country...';
 
 	$: if (guess) {
 		const correct = guess.code === ctryCode;
@@ -33,7 +38,7 @@
 
 	<Map {ctryCode} bind:guess {current} bind:selected {won} {gameOver} />
 
-	<CountrySearch {countries} bind:guess disabled={gameOver} />
+	<CountrySearch {countries} bind:guess disabled={gameOver} {message} />
 
 	<Guesses {guesses} {current} bind:selected />
 </main>

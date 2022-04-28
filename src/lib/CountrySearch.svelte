@@ -5,6 +5,7 @@
 	export let countries: Country[];
 	export let guess: Country | undefined;
 	export let disabled = false;
+	export let message: string;
 
 	const extract = (ctry: Country) => ctry.name;
 </script>
@@ -14,8 +15,8 @@
 		data={countries}
 		{extract}
 		limit={10}
-		label="Guess the country..."
-		placeholder="Guess the country..."
+		label={message}
+		placeholder={message}
 		on:select={({ detail }) => (guess = detail.original)}
 		inputAfterSelect="clear"
 		{disabled}
