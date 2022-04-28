@@ -1,8 +1,9 @@
 <script lang="ts">
-	import Map from '$lib/map/Map.svelte';
 	import CountrySearch from '$lib/CountrySearch.svelte';
-	import type { Country, Guess } from '$lib/types';
 	import Guesses from '$lib/Guesses.svelte';
+	import Map from '$lib/map/Map.svelte';
+	import type { Country, Guess } from '$lib/types';
+	import Header from '../lib/header/Header.svelte';
 
 	export let countries: Country[];
 	export let ctryCode: string;
@@ -21,8 +22,12 @@
 	<title>Worldie</title>
 </svelte:head>
 
-<Map {ctryCode} bind:guess />
+<main class="bg-blue-200 inset-0 fixed flex flex-col items-center">
+	<Header />
 
-<CountrySearch {countries} bind:guess />
+	<Map {ctryCode} bind:guess />
 
-<Guesses {guesses} {current} {selected} />
+	<CountrySearch {countries} bind:guess />
+
+	<Guesses {guesses} {current} {selected} />
+</main>

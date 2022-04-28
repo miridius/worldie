@@ -23,7 +23,7 @@
 		if (guess.code === ctryCode) {
 			map.showWin(guess.name);
 		} else {
-			map.showWrongGuess(guess.code, guess.name);
+			map.addWrongGuess(guess.code, guess.name);
 		}
 		guess = undefined;
 	}
