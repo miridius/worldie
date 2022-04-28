@@ -1,42 +1,45 @@
 <script lang="ts">
+	import CountrySearch from '$lib/CountrySearch.svelte';
+	import Guesses from '$lib/Guesses.svelte';
 	import Map from '$lib/map/Map.svelte';
-	import Typeahead from 'svelte-typeahead';
-
-	type Country = { name: string; code: string };
+	import type { Country, Guess } from '$lib/types';
+	import Header from '../lib/header/Header.svelte';
 
 	export let countries: Country[];
 	export let ctryCode: string;
 
-	const extract = (ctry: Country) => ctry.name;
+	const MAX_GUESSES = 6;
 
 	let guess: Country | undefined;
+	let guesses: (Guess | undefined)[] = Array(MAX_GUESSES).fill(undefined);
+	let current = 0;
+	let selected = 0;
+	let won = false;
+	$: gameOver = won || current >= MAX_GUESSES;
+
+	$: if (guess) {
+		const correct = guess.code === ctryCode;
+		guesses[current] = { ...guess, correct, close: false };
+		if (correct) {
+			won = true;
+		} else {
+			current++;
+		}
+	}
 </script>
 
 <svelte:head>
 	<title>Worldie</title>
 </svelte:head>
 
-<Map {ctryCode} bind:guess />
+<main class="bg-blue-200 inset-0 fixed flex flex-col items-center">
+	<Header />
 
-<div class="p-3 w-full max-w-sm">
-	<Typeahead
-		data={countries}
-		{extract}
-		limit={10}
-		placeholder="Guess the country..."
-		on:select={({ detail }) => (guess = detail.original)}
-		inputAfterSelect="clear"
-	/>
-</div>
+	<Map {ctryCode} bind:guess {current} bind:selected {won} {gameOver} />
 
-<style lang="postcss">
-	/* move the results list above the input + make sure it appears in front of the map */
-	:global([data-svelte-typeahead] ul) {
-		@apply top-auto bottom-full z-[9999];
-	}
+	<CountrySearch {countries} bind:guess {gameOver} {won} />
 
-	/* hide the typeahead label */
-	:global([data-svelte-search] label) {
-		@apply hidden;
-	}
-</style>
+	<footer class="w-100 flex justify-center items-center portrait:flex-col">
+		<Guesses {guesses} {current} bind:selected />
+	</footer>
+</main>
