@@ -10,11 +10,11 @@
 	export let current: number;
 	export let selected: number;
 
-	const getColour = (g?: Guess) => {
-		if (!g) return 'white';
-		if (g.correct) return 'green-500';
-		if (g.close) return 'yellow-500';
-		return 'red-500';
+	const getButtonBg = (g?: Guess) => {
+		if (!g) return 'bg-white';
+		if (g.correct) return 'bg-green-500';
+		if (g.close) return 'bg-yellow-500';
+		return 'bg-red-500';
 	};
 
 	let open = false;
@@ -23,7 +23,7 @@
 <section class="px-6 py-3 w-full max-w-sm flex justify-around gap-2">
 	{#each guesses as guess, i}
 		<button
-			class={`h-8 aspect-square rounded-md border-gray-800 bg-${getColour(guess)}`}
+			class={`h-8 aspect-square rounded-md border-gray-800 ${getButtonBg(guess)}`}
 			class:border-4={i === selected}
 			class:bg-blue-500={i === current}
 		>
