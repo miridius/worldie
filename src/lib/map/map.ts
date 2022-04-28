@@ -94,6 +94,7 @@ export default class Map {
 
 	showWin() {
 		this.targetCtry?.layer.setStyle({ color: '#10b981' }).bringToFront();
+		this.gameOver();
 	}
 
 	gameOver() {

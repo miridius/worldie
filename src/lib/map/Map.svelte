@@ -25,7 +25,13 @@
 
 	$: if (guess) {
 		if (guess.code !== ctryCode) {
-			map.addWrongGuess(guess.code, guess.name).then(() => !gameOver && (selected = current));
+			map.addWrongGuess(guess.code, guess.name).then(() => {
+				if (gameOver) {
+					map.gameOver();
+				} else {
+					selected = current;
+				}
+			});
 		}
 		guess = undefined;
 	}
@@ -33,7 +39,6 @@
 	$: map?.showGuess(selected);
 
 	$: if (won) map.showWin();
-	$: if (gameOver) map.gameOver();
 </script>
 
 <div class="h-full w-full flex justify-center items-center p-2 bg-transparent" {id}>
