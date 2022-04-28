@@ -4,6 +4,7 @@
 
 	export let countries: Country[];
 	export let guess: Country | undefined;
+	export let disabled = false;
 
 	const extract = (ctry: Country) => ctry.name;
 </script>
@@ -17,6 +18,7 @@
 		placeholder="Guess the country..."
 		on:select={({ detail }) => (guess = detail.original)}
 		inputAfterSelect="clear"
+		{disabled}
 	/>
 </div>
 

@@ -8,13 +8,19 @@
 	export let countries: Country[];
 	export let ctryCode: string;
 
+	const MAX_GUESSES = 6;
+
 	let guess: Country | undefined;
-	let guesses: (Guess | undefined)[] = Array(6).fill(undefined);
+	let guesses: (Guess | undefined)[] = Array(MAX_GUESSES).fill(undefined);
 	let current = 0;
-	$: selected = current;
+	let selected = 0;
+	let won = false;
+	$: gameOver = won || current >= MAX_GUESSES;
 
 	$: if (guess) {
-		guesses[current++] = { ...guess, correct: guess.code === ctryCode, close: false };
+		const correct = guess.code === ctryCode;
+		if (correct) won = true;
+		guesses[current++] = { ...guess, correct, close: false };
 	}
 </script>
 
@@ -25,9 +31,9 @@
 <main class="bg-blue-200 inset-0 fixed flex flex-col items-center">
 	<Header />
 
-	<Map {ctryCode} bind:guess />
+	<Map {ctryCode} bind:guess {current} bind:selected {won} {gameOver} />
 
-	<CountrySearch {countries} bind:guess />
+	<CountrySearch {countries} bind:guess disabled={gameOver} />
 
-	<Guesses {guesses} {current} {selected} />
+	<Guesses {guesses} {current} bind:selected />
 </main>

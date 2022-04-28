@@ -20,12 +20,10 @@ const PAUSE_MS = 1500;
 // this needs to be imported dynamically because it crashes if imported on the server
 let L: typeof import('leaflet/index');
 
-type Guess = { layer: GeoJSON; marker: Marker };
-
 export default class Map {
 	map!: LeafletMap;
 	targetCtry!: GeoJSON;
-	guesses: Guess[] = [];
+	guesses: { layer: GeoJSON; marker: Marker }[] = [];
 
 	// this logic can't be in the constructor because it is async
 	async init(elementId: string, targetCtryCode: string) {
@@ -47,15 +45,19 @@ export default class Map {
 		const layer = await this.addCtry(ctryCode, colors.red['500']);
 		const marker = this.addMarker(layer, ctryName);
 		this.guesses.push({ layer, marker });
-		await this.showGuess({ layer, marker });
+		await this.showGuess(this.guesses.length - 1);
 		await sleep(PAUSE_MS);
 		await this.showTarget();
 	}
 
-	async showGuess(guess: Guess): Promise<void> {
-		if (!guess) return;
-		await this.fly(this.targetCtry.getBounds().extend(guess.layer.getBounds()));
-		guess.marker.openTooltip();
+	async showGuess(index: number): Promise<void> {
+		const guess = this.guesses[index];
+		if (guess) {
+			await this.fly(this.targetCtry.getBounds().extend(guess.layer.getBounds()));
+			guess.marker.openTooltip();
+		} else {
+			this.showTarget();
+		}
 	}
 
 	async showTarget(): Promise<void> {
@@ -81,9 +83,12 @@ export default class Map {
 			.bindTooltip(title);
 	}
 
-	showWin(ctryName: string) {
+	showWin() {
+		this.targetCtry?.setStyle({ color: '#10b981' }).bringToFront();
+	}
+
+	gameOver() {
 		this.showFullMap();
-		this.targetCtry?.setStyle({ color: '#10b981' }).bringToFront().bindPopup(ctryName);
 	}
 
 	private showFullMap() {

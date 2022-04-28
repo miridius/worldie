@@ -8,6 +8,10 @@
 
 	export let ctryCode: string;
 	export let guess: { name: string; code: string } | undefined;
+	export let current: number;
+	export let selected: number;
+	export let won: boolean;
+	export let gameOver: boolean;
 
 	const id = `map-${nextId++}`;
 
@@ -20,13 +24,16 @@
 	});
 
 	$: if (guess) {
-		if (guess.code === ctryCode) {
-			map.showWin(guess.name);
-		} else {
-			map.addWrongGuess(guess.code, guess.name);
+		if (guess.code !== ctryCode) {
+			map.addWrongGuess(guess.code, guess.name).then(() => !gameOver && (selected = current));
 		}
 		guess = undefined;
 	}
+
+	$: map?.showGuess(selected);
+
+	$: if (won) map.showWin();
+	$: if (gameOver) map.gameOver();
 </script>
 
 <div class="h-full w-full flex justify-center items-center p-2 bg-transparent" {id}>

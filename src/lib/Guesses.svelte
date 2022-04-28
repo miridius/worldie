@@ -24,6 +24,7 @@
 			class={`h-8 w-8 rounded-md border-gray-800 ${getButtonBg(guess)}`}
 			class:border-4={i === selected}
 			class:bg-blue-500={i === current}
+			on:click={() => (selected = i)}
 		>
 			{guess?.name.charAt(0) || ' '}
 		</button>
