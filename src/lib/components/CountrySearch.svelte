@@ -30,9 +30,14 @@
 </div>
 
 <style lang="postcss">
-	/* move the results list above the input + make sure it appears in front of the map */
+	/* make sure typeahead results appear in front of the map */
+	:global([data-svelte-typeahead]) {
+		@apply z-[9999];
+	}
+
+	/* move the results list above the input */
 	:global([data-svelte-typeahead] ul) {
-		@apply top-auto bottom-full z-[9999];
+		@apply top-auto bottom-full;
 	}
 
 	/* hide the typeahead label */

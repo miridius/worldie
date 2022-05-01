@@ -24,6 +24,8 @@
 			won = true;
 		} else {
 			current++;
+			// remove already guessed countries from the search list
+			countries = countries.filter((c) => c.code !== guess?.code);
 		}
 	}
 </script>

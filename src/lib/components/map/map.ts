@@ -37,12 +37,13 @@ export default class Map {
 		this.map = L.map(elementId, { attributionControl: false, zoomSnap: 0.1 });
 		const layer = await this.addCtry(targetCtryCode, colors.sky['500']);
 		this.targetCtry = { layer, marker: this.addMarker(layer, '?') };
-		this.map.fitBounds(this.targetBounds.pad(0.1));
+		this.map.fitBounds(this.targetBounds);
+		this.targetCtry.marker.openTooltip();
 		return this;
 	}
 
 	get targetBounds() {
-		return this.targetCtry.layer.getBounds();
+		return this.targetCtry.layer.getBounds().pad(0.1);
 	}
 
 	private async addCtry(ctryCode: string, color: string) {
@@ -68,9 +69,12 @@ export default class Map {
 		const guess = this.guesses[index];
 		if (guess) {
 			this.targetCtry.marker.closeTooltip();
-			await this.fly(this.targetBounds.extend(guess.layer.getBounds()));
+			const bounds = guess.layer.getBounds().pad(0.1);
+			// include the target in the frame as well but only if min zoom level supports it
+			if (this.map.getMinZoom() <= 2) bounds.extend(this.targetBounds);
+			await this.fly(bounds);
 			guess.marker.openTooltip();
-		} else {
+		} else if (index > 0) {
 			this.showTarget();
 		}
 	}
@@ -78,7 +82,7 @@ export default class Map {
 	async showTarget(): Promise<void> {
 		this.targetCtry.layer.bringToFront();
 		this.hideAllTooltips();
-		await this.fly(this.targetBounds.pad(0.5));
+		await this.fly(this.targetBounds);
 		this.targetCtry.marker.openTooltip();
 	}
 
