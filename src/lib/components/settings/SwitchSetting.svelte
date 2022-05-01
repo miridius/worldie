@@ -2,16 +2,17 @@
 	import { Switch, SwitchGroup, SwitchLabel } from '@rgossiaux/svelte-headlessui';
 
 	export let label: string;
-	export let enabled: boolean;
+	export let value: boolean;
+	export let set: (v: boolean) => void;
 </script>
 
 <SwitchGroup class="flex justify-between items-center p-3 px-4 border-b border-gray-500">
 	<SwitchLabel class="text-lg">{label}</SwitchLabel>
 	<Switch
-		checked={enabled}
-		on:change={(e) => (enabled = e.detail)}
+		checked={value}
+		on:change={(e) => set((value = e.detail))}
 		class={`
-			${enabled ? 'bg-green-400' : 'bg-gray-400'} 
+			${value ? 'bg-green-500' : 'bg-gray-500'} 
 			shadow-gray-600 shadow-inner
 			relative inline-flex flex-shrink-0
 			h-5 w-9 p-0.5
@@ -24,8 +25,8 @@
 	>
 		<span class="sr-only">{label}</span>
 		<span
-			class="inline-block h-full aspect-square bg-white rounded-full transition-transform shadow-md shadow-gray-700"
-			class:translate-x-4={enabled}
+			class="inline-block h-4 w-4 bg-white rounded-full transition-transform shadow shadow-black"
+			class:translate-x-4={value}
 		/>
 	</Switch>
 </SwitchGroup>

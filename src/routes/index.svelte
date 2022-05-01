@@ -1,9 +1,9 @@
 <script lang="ts">
-	import CountrySearch from '$lib/CountrySearch.svelte';
-	import Guesses from '$lib/Guesses.svelte';
-	import Map from '$lib/map/Map.svelte';
+	import CountrySearch from '$lib/components/CountrySearch.svelte';
+	import Guesses from '$lib/components/Guesses.svelte';
+	import Map from '$lib/components/map/Map.svelte';
 	import type { Country, Guess } from '$lib/types';
-	import Header from '../lib/header/Header.svelte';
+	import Header from '../lib/components/Header.svelte';
 
 	export let countries: Country[];
 	export let ctryCode: string;

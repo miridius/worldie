@@ -1,14 +1,14 @@
 <script lang="ts">
-	import Help from './components/Help.svelte';
-	import HelpIcon from '../icons/HelpIcon.svelte';
-	import Settings from './components/Settings.svelte';
-	import SettingsIcon from '../icons/SettingsIcon.svelte';
+	import Help from '$lib/components/Help.svelte';
+	import HelpIcon from '$lib/components/icons/HelpIcon.svelte';
+	import SettingsIcon from '$lib/components/icons/SettingsIcon.svelte';
+	import Settings from '$lib/components/settings/Settings.svelte';
 
 	let helpOpen = false;
 	let settingsOpen = false;
 </script>
 
-<nav class="w-full flex justify-between items-center p-3">
+<nav class="w-full max-w-3xl flex justify-between items-center p-3">
 	<button on:click={() => (helpOpen = true)}><HelpIcon /></button>
 
 	<h1 class="text-3xl font-bold uppercase">Worldie</h1>
