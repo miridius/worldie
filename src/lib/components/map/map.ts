@@ -1,3 +1,5 @@
+import { settings$ } from '$lib/components/settings/store';
+import { sleep } from '$lib/utils';
 import type {
 	FeatureGroup,
 	FitBoundsOptions,
@@ -6,7 +8,7 @@ import type {
 	Map as LeafletMap,
 	Marker,
 } from 'leaflet';
-import { sleep } from '../utils';
+import { derived } from 'svelte/store';
 
 const colors = {
 	sky: { '500': '#0ea5e9' },
@@ -14,8 +16,10 @@ const colors = {
 	emerald: { '500': '#10b981' },
 };
 
-const FLY_MS = 1500;
-const PAUSE_MS = 1500;
+let FLY_MS: number, PAUSE_MS: number;
+settings$.subscribe((v) => ({ flyTimeMs: FLY_MS, pauseTimeMs: PAUSE_MS } = v));
+
+const style$ = derived(settings$, (s) => ({ weight: s['style.weight'], fill: s['style.fill'] }));
 
 // this needs to be imported dynamically because it crashes if imported on the server
 let L: typeof import('leaflet/index');
@@ -45,7 +49,10 @@ export default class Map {
 		const data = await fetch(`./data/${ctryCode.toLowerCase()}.geo.json`)
 			.then((res) => res.json())
 			.catch(alert);
-		return L.geoJSON(data, { style: { weight: 4, color, fill: false } }).addTo(this.map);
+		// const layer = L.geoJSON(data, { style: { color, ...get(style) } }).addTo(this.map);
+		const layer = L.geoJSON(data).addTo(this.map);
+		style$.subscribe((style) => layer.setStyle({ color, ...style }));
+		return layer;
 	}
 
 	async addWrongGuess(ctryCode: string, ctryName: string) {

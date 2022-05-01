@@ -7,9 +7,12 @@
 </script>
 
 <Dialog {open} on:close={() => (open = false)}>
-	<div transition:fly={{ y: 200, duration: 250 }} class="fixed inset-0 bg-blue-200 text-black">
-		<div class="w-full max-w-xl mx-auto flex flex-col relative">
-			<DialogTitle class="text-inherit uppercase font-bold self-center p-2 text-3xl"
+	<div
+		transition:fly={{ y: 200, duration: 250 }}
+		class="fixed inset-0 top-14 bg-blue-50/75 text-black"
+	>
+		<div class="w-full max-w-3xl mx-auto flex flex-col relative">
+			<DialogTitle class="text-inherit uppercase font-bold self-center p-2 text-2xl"
 				>{title}</DialogTitle
 			>
 			<button

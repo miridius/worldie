@@ -1,8 +1,8 @@
 <script lang="ts">
+	import DownIcon from '$lib/components/icons/DownIcon.svelte';
+	import UpIcon from '$lib/components/icons/UpIcon.svelte';
+	import type { Guess } from '$lib/types';
 	import { fly } from 'svelte/transition';
-	import DownIcon from './icons/DownIcon.svelte';
-	import UpIcon from './icons/UpIcon.svelte';
-	import type { Guess } from './types';
 
 	export let guesses: (Guess | undefined)[];
 	export let current: number;
