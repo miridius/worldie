@@ -33,7 +33,6 @@
 				}
 			});
 		}
-		guess = undefined;
 	}
 
 	$: map?.showGuess(selected);
@@ -44,3 +43,16 @@
 <div class="h-full w-full flex justify-center items-center p-2 bg-transparent" {id}>
 	{#if loading}<p class="text-xl">Loading map...</p>{/if}
 </div>
+
+<style lang="postcss">
+	:global(.leaflet-control-zoom) {
+		@apply flex flex-row-reverse border-0 rounded-lg shadow-lg m-4 !important;
+	}
+
+	:global(.leaflet-control-zoom a) {
+		@apply rounded-none last:rounded-l-lg first:rounded-r-lg
+		border-0 first:border-l first:pr-0.5 first:w-8 border-gray-300
+		bg-white shadow-[inset_0_-2px_2px_rgb(0,0,0,0.06)] 
+		font-thin text-gray-700 !important;
+	}
+</style>

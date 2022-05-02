@@ -14,7 +14,11 @@ const config = {
 			green: colors.emerald,
 			blue: colors.sky,
 		},
-		extend: {},
+		extend: {
+			fontFamily: {
+				display: ['DM Serif Display', 'Times New Roman', 'Times', 'serif'],
+			},
+		},
 	},
 
 	plugins: [],

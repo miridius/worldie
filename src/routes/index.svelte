@@ -34,7 +34,7 @@
 	<title>Worldie</title>
 </svelte:head>
 
-<main class="bg-blue-200 inset-0 fixed flex flex-col items-center">
+<main class="bg-blue-100 inset-0 fixed flex flex-col items-center">
 	<Header />
 
 	<Map {ctryCode} bind:guess {current} bind:selected {won} {gameOver} />
