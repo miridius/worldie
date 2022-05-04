@@ -18,7 +18,7 @@
 	let open = false;
 </script>
 
-<section class="px-6 py-3 w-full max-w-sm flex justify-around gap-2">
+<section class="px-6 py-3 w-full max-w-xs flex justify-around gap-2">
 	{#each guesses as guess, i}
 		<button
 			class={`h-8 w-8 rounded-md border-gray-800 ${getButtonBg(guess, i)}`}

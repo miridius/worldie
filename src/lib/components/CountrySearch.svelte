@@ -10,7 +10,7 @@
 	$: label = gameOver
 		? won
 			? `You guessed it, it's ${guess?.name.toUpperCase()}!`
-			: 'Better luck next time!'
+			: `It's ${guess?.name.toUpperCase()}. Better luck next time!`
 		: 'Guess the country';
 
 	const extract = (ctry: Country) => ctry.name;
@@ -50,7 +50,7 @@
 
 	/* styles for the results list */
 	:global([data-svelte-typeahead] ul) {
-		@apply top-auto bottom-full bg-white z-[9999] rounded-xl !important;
+		@apply top-auto bottom-full bg-white rounded-xl !important;
 	}
 
 	/* styles for the label */

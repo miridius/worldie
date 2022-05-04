@@ -34,14 +34,13 @@
 	<title>Worldie</title>
 </svelte:head>
 
-<main class="bg-blue-100 inset-0 fixed flex flex-col items-center">
+<main class="bg-white inset-0 fixed flex flex-col items-center">
 	<Header />
 
 	<Map {ctryCode} bind:guess {current} bind:selected {won} {gameOver} />
 
-	<CountrySearch {countries} bind:guess {gameOver} {won} />
-
-	<footer class="w-100 flex justify-center items-center portrait:flex-col">
+	<footer class="fixed bottom-0 w-full flex justify-center items-center portrait:flex-col z-[999]">
+		<CountrySearch {countries} bind:guess {gameOver} {won} />
 		<Guesses {guesses} {current} bind:selected />
 	</footer>
 </main>

@@ -118,7 +118,7 @@ export default class Map {
 		this.map.setView(this.targetBounds.getCenter(), Math.max(3, this.map.getZoom()));
 		L.tileLayer(
 			'https://tile.tracestrack.com/en/{z}/{x}/{y}.png?key=1c9009346d9c00c44c84ef373ba739a4',
-			{ opacity: 0.5 },
+			{ opacity: 1 },
 		).addTo(this.map);
 	}
 }

@@ -26,11 +26,8 @@
 	$: if (guess) {
 		if (guess.code !== ctryCode) {
 			map.addWrongGuess(guess.code, guess.name).then(() => {
-				if (gameOver) {
-					map.gameOver();
-				} else {
-					selected = current;
-				}
+				selected = current;
+				if (gameOver) map.gameOver();
 			});
 		}
 	}
@@ -40,17 +37,19 @@
 	$: if (won) map.showWin();
 </script>
 
-<div class="h-full w-full flex justify-center items-center p-2 bg-transparent" {id}>
+<div class="h-full w-full flex justify-center items-center bg-blue-100" {id}>
 	{#if loading}<p class="text-xl">Loading map...</p>{/if}
 </div>
 
 <style lang="postcss">
+	/* Override zoom control styles */
 	:global(.leaflet-control-zoom) {
-		@apply flex flex-row-reverse border-0 rounded-lg shadow-lg m-4 !important;
+		@apply flex flex-row-reverse border-0 rounded shadow-md m-4 mt-[4.75rem] !important;
 	}
 
+	/* Override zoom control button styles */
 	:global(.leaflet-control-zoom a) {
-		@apply rounded-none last:rounded-l-lg first:rounded-r-lg
+		@apply rounded-none last:rounded-l first:rounded-r
 		border-0 first:border-l first:pr-0.5 first:w-8 border-gray-300
 		bg-white shadow-[inset_0_-2px_2px_rgb(0,0,0,0.06)] 
 		font-thin text-gray-700 !important;
