@@ -2,6 +2,11 @@
 
 @import 'leaflet/dist/leaflet.css';
 
+@import '@fontsource/dm-serif-display';
+@import '@fontsource/hind-siliguri';
+@import '@fontsource/hind-siliguri/500.css';
+@import '@fontsource/hind-siliguri/300.css';
+
 @tailwind base;
 
 @tailwind components;

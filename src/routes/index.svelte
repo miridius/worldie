@@ -2,44 +2,67 @@
 	import CountrySearch from '$lib/components/CountrySearch.svelte';
 	import Guesses from '$lib/components/Guesses.svelte';
 	import Map from '$lib/components/map/Map.svelte';
+	import { settings$ } from '$lib/components/settings/store';
 	import type { Country, Guess } from '$lib/types';
+	import { get } from 'svelte/store';
 	import Header from '../lib/components/Header.svelte';
 
-	export let countries: Country[];
-	export let ctryCode: string;
+	export let countryList: Country[];
+	export let answer: Country;
+	export let borders: string[];
 
-	const MAX_GUESSES = 6;
+	const maxGuesses = 6;
 
-	let guess: Country | undefined;
-	let guesses: (Guess | undefined)[] = Array(MAX_GUESSES).fill(undefined);
+	// @hmr:keep-all
+	let guesses: Guess[] = [];
 	let current = 0;
 	let selected = 0;
 	let won = false;
-	$: gameOver = won || current >= MAX_GUESSES;
+	$: gameOver = won || current >= maxGuesses;
 
-	$: if (guess) {
-		const correct = guess.code === ctryCode;
-		guesses[current] = { ...guess, correct, close: false };
+	let timeout: NodeJS.Timeout;
+	const guess = (country?: Country) => {
+		if (!country) return;
+		const correct = country.code === answer.code;
+		const close = borders.includes(country.code);
+		selected = guesses.length;
+		guesses = [...guesses, { ...country, correct, close }];
 		if (correct) {
 			won = true;
 		} else {
-			current++;
+			// wait for the map to start returning to the target country then move the guess indicator
+			const { flyTimeMs, pauseTimeMs } = get(settings$);
+			if (timeout) clearTimeout(timeout);
+			timeout = setTimeout(
+				() => !gameOver && (selected = current = guesses.length),
+				flyTimeMs + pauseTimeMs,
+			);
+			// remove already guessed countries from the search list
+			countryList = countryList.filter((c) => c.code !== country?.code);
 		}
-	}
+	};
+
+	let keyboardOpen = false;
+	globalThis.visualViewport?.addEventListener('resize', () => {
+		keyboardOpen = globalThis.visualViewport.height < globalThis.screen.height * 0.7;
+	});
 </script>
 
 <svelte:head>
 	<title>Worldie</title>
 </svelte:head>
 
-<main class="bg-blue-200 inset-0 fixed flex flex-col items-center">
-	<Header />
+<main class="bg-blue-100 inset-0 fixed flex flex-col items-center">
+	<header class="fixed top-0 w-full z-[999] bg-white">
+		<Header />
+	</header>
 
-	<Map {ctryCode} bind:guess {current} bind:selected {won} {gameOver} />
+	<Map {answer} {guesses} {selected} {won} {gameOver} />
 
-	<CountrySearch {countries} bind:guess {gameOver} {won} />
-
-	<footer class="w-100 flex justify-center items-center portrait:flex-col">
-		<Guesses {guesses} {current} bind:selected />
+	<footer class="fixed bottom-0 w-full z-[999] flex justify-center items-center portrait:flex-col">
+		<CountrySearch {countryList} {guess} {gameOver} {won} {answer} />
+		{#if !keyboardOpen}
+			<Guesses {guesses} {maxGuesses} {current} bind:selected />
+		{/if}
 	</footer>
 </main>

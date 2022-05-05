@@ -9,11 +9,11 @@ export interface Settings {
 }
 
 export const DEFAULT_SETTINGS: Settings = {
-	'style.weight': 2,
+	'style.weight': 1,
 	'style.fill': true,
 	theme: 'auto',
-	flyTimeMs: 1500,
-	pauseTimeMs: 1500,
+	flyTimeMs: 1250,
+	pauseTimeMs: 2000,
 };
 
 // Create a store that starts with either the stored value or the default.

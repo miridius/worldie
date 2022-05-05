@@ -40,6 +40,8 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@fontsource/dm-serif-display": "^4.5.7",
+		"@fontsource/hind-siliguri": "^4.5.8",
 		"@rgossiaux/svelte-headlessui": "^1.0.0-beta.12",
 		"leaflet": "^1.8.0",
 		"world-countries": "^4.0.0"
