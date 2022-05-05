@@ -1,10 +1,12 @@
 <script lang="ts">
-	import Help from '$lib/components/Help.svelte';
-	import HelpIcon from '$lib/components/icons/HelpIcon.svelte';
-	import SettingsIcon from '$lib/components/icons/SettingsIcon.svelte';
-	import Settings from '$lib/components/settings/Settings.svelte';
+	import HelpPage from './HelpPage.svelte';
+	import HelpIcon from './icons/HelpIcon.svelte';
 	import MenuIcon from './icons/MenuIcon.svelte';
+	import SettingsIcon from './icons/SettingsIcon.svelte';
 	import StatsIcon from './icons/StatsIcon.svelte';
+	import MenuPage from './MenuPage.svelte';
+	import SettingsPage from './settings/SettingsPage.svelte';
+	import StatsPage from './StatsPage.svelte';
 
 	// @hmr:keep-all
 	let menuOpen = false;
@@ -23,5 +25,7 @@
 	<button class="w-5 h-5" on:click={() => (settingsOpen = true)}><SettingsIcon /></button>
 </nav>
 
-<Help bind:open={helpOpen} />
-<Settings bind:open={settingsOpen} />
+<MenuPage bind:open={menuOpen} />
+<HelpPage bind:open={helpOpen} />
+<StatsPage bind:open={statsOpen} />
+<SettingsPage bind:open={settingsOpen} />

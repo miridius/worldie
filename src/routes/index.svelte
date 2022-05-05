@@ -20,8 +20,6 @@
 	let won = false;
 	$: gameOver = won || current >= maxGuesses;
 
-	$: console.debug('selected:', selected);
-
 	let timeout: NodeJS.Timeout;
 	const guess = (country?: Country) => {
 		if (!country) return;
