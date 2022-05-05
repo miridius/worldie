@@ -48,20 +48,28 @@
 		<button class="w-10 text-gray-700" on:click={() => (open = false)}>
 			<DownIcon />
 		</button>
-		<ol class="pb-4 w-full max-w-xs border-b border-gray-400">
-			{#each guesses.filter((g) => g) as guess, i}
-				<li class="font-medium flex items-center gap-2.5 my-2">
-					<button
-						class={`h-6 w-6 rounded-md
+
+		{#if guesses?.length}
+			<ol class="pb-4 w-full max-w-xs border-b border-gray-400">
+				{#each guesses.filter((g) => g) as guess, i}
+					<li class="font-medium flex items-center gap-2.5 my-2">
+						<button
+							class={`h-6 w-6 rounded-md
 						${getButtonBg(guess)} shadow-md shadow-black/20
 						text-white text-sm`}
-						on:click={() => (selected = i)}>{i + 1}</button
-					>
-					{guess?.name}
-				</li>
-			{/each}
-		</ol>
+							on:click={() => (selected = i)}>{i + 1}</button
+						>
+						{guess?.name}
+					</li>
+				{/each}
+			</ol>
 
-		<p class="py-4 mb-2 font-light w-full max-w-xs">Click to zoom to a country on the map</p>
+			<p class="py-4 mb-2 font-light w-full max-w-xs">Click to zoom to a country on the map</p>
+		{:else}
+			<div class="mb-2 space-y-2">
+				<p>You haven't guessed anything yet.</p>
+				<p>After you've made some guesses, they'll show up here.</p>
+			</div>
+		{/if}
 	</section>
 {/if}
