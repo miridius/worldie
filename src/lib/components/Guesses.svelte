@@ -41,7 +41,7 @@
 	<section
 		class="fixed bottom-0 w-full z-[1000]
 		flex flex-col items-center
-		p-2 px-8
+		px-6 p-1
 		shadow-2xl bg-white"
 		transition:fly={{ y: 200, duration: 250 }}
 	>
@@ -50,11 +50,11 @@
 		</button>
 
 		{#if guesses?.length}
-			<ol class="pb-4 w-full max-w-xs border-b border-gray-400">
+			<ol class="pb-4 w-full max-w-sm border-b border-gray-400">
 				{#each guesses.filter((g) => g) as guess, i}
 					<li class="font-medium flex items-center gap-2.5 my-2">
 						<button
-							class={`h-6 w-6 rounded-md
+							class={`h-6 w-6 rounded-md shrink-0
 						${getButtonBg(guess)} shadow-md shadow-black/20
 						text-white text-sm`}
 							on:click={() => (selected = i)}>{i + 1}</button
@@ -64,7 +64,7 @@
 				{/each}
 			</ol>
 
-			<p class="py-4 mb-2 font-light w-full max-w-xs">Click to zoom to a country on the map</p>
+			<p class="py-4 font-light w-full max-w-sm">Tap to fly to a country on the map</p>
 		{:else}
 			<div class="mb-2 space-y-2">
 				<p>You haven't guessed anything yet.</p>
