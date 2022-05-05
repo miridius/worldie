@@ -43,6 +43,11 @@
 			countryList = countryList.filter((c) => c.code !== country?.code);
 		}
 	};
+
+	let keyboardOpen = false;
+	globalThis.visualViewport.addEventListener('resize', () => {
+		keyboardOpen = globalThis.visualViewport.height < globalThis.screen.height * 0.8;
+	});
 </script>
 
 <svelte:head>
@@ -54,10 +59,16 @@
 		<Header />
 	</header>
 
+	<pre class="fixed bottom-36 right-4 text-sm">height: {globalThis.screen.height}
+availHeight: {globalThis.screen.availHeight}
+visualViewport: {globalThis.visualViewport.height}</pre>
+
 	<Map {answer} {guesses} {selected} {won} {gameOver} />
 
 	<footer class="fixed bottom-0 w-full z-[999] flex justify-center items-center portrait:flex-col">
 		<CountrySearch {countryList} {guess} {gameOver} {won} {answer} />
-		<Guesses {guesses} {maxGuesses} {current} bind:selected />
+		{#if !keyboardOpen}
+			<Guesses {guesses} {maxGuesses} {current} bind:selected />
+		{/if}
 	</footer>
 </main>
