@@ -37,7 +37,7 @@
 
 	/* styles for the search input */
 	:global([data-svelte-typeahead] input) {
-		@apply border-0 bg-white rounded-xl
+		@apply border-0 bg-white rounded-xl opacity-100
 		placeholder:text-gray-600 placeholder:text-center !important;
 	}
 	:global([data-svelte-typeahead] input:not(:disabled)) {
