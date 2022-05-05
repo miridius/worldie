@@ -1,4 +1,5 @@
 const colors = require('tailwindcss/colors');
+const defaultTheme = require('tailwindcss/defaultTheme');
 
 const config = {
 	content: ['./src/**/*.{html,js,svelte,ts}'],
@@ -18,6 +19,7 @@ const config = {
 		extend: {
 			fontFamily: {
 				display: ['DM Serif Display', 'Times New Roman', 'Times', 'serif'],
+				sans: ['Hind Siliguri', ...defaultTheme.fontFamily.sans],
 			},
 		},
 	},

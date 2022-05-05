@@ -12,7 +12,7 @@
 	$: label = gameOver
 		? won
 			? `You guessed it, it's ${countryName}!`
-			: `It was ${countryName}! Better luck next time.`
+			: `It's ${countryName}! Better luck next time.`
 		: 'Guess the country';
 </script>
 

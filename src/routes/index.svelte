@@ -4,7 +4,6 @@
 	import Map from '$lib/components/map/Map.svelte';
 	import { settings$ } from '$lib/components/settings/store';
 	import type { Country, Guess } from '$lib/types';
-	import { sleep } from '$lib/utils';
 	import { get } from 'svelte/store';
 	import Header from '../lib/components/Header.svelte';
 
@@ -23,6 +22,7 @@
 
 	$: console.debug('selected:', selected);
 
+	let timeout: NodeJS.Timeout;
 	const guess = (country?: Country) => {
 		if (!country) return;
 		const correct = country.code === answer.code;
@@ -34,7 +34,11 @@
 		} else {
 			// wait for the map to start returning to the target country then move the guess indicator
 			const { flyTimeMs, pauseTimeMs } = get(settings$);
-			sleep(flyTimeMs + pauseTimeMs).then(() => !gameOver && (selected = current = guesses.length));
+			if (timeout) clearTimeout(timeout);
+			timeout = setTimeout(
+				() => !gameOver && (selected = current = guesses.length),
+				flyTimeMs + pauseTimeMs,
+			);
 			// remove already guessed countries from the search list
 			countryList = countryList.filter((c) => c.code !== country?.code);
 		}
