@@ -4,34 +4,36 @@
 	import type { Guess } from '$lib/types';
 	import { fly } from 'svelte/transition';
 
-	export let guesses: (Guess | undefined)[];
+	export let guesses: Guess[];
+	export let maxGuesses: number;
 	export let current: number;
 	export let selected: number;
 
-	const getButtonBg = (g: Guess | undefined, index: number) => {
-		if (!g) return index === current ? 'bg-blue-500' : 'bg-white';
-		if (g.correct) return 'bg-green-500';
-		if (g.close) return 'bg-yellow-500';
-		return 'bg-red-500';
+	$: guessSlots = [...guesses, ...Array(maxGuesses - guesses.length).fill(undefined)];
+
+	const getButtonBg = (guess: Guess | undefined, index: number) => {
+		if (!guess) return 'bg-white';
+		if (guess.correct) return 'bg-green-500';
+		if (guess.close) return 'bg-yellow-500';
+		return 'bg-red-600';
 	};
 
 	let open = false;
 </script>
 
-<section class="px-6 py-3 w-full max-w-xs flex justify-around gap-2">
-	{#each guesses as guess, i}
+<section class="w-full max-w-xs flex justify-center gap-3">
+	{#each guessSlots as guess, i}
 		<button
-			class={`h-8 w-8 rounded-md border-gray-800 ${getButtonBg(guess, i)}`}
-			class:border-4={i === selected}
+			class={`h-8 w-8 rounded-lg border-gray-800 ${getButtonBg(guess, i)} shadow-lg`}
+			class:bg-blue-600={!guess && i === current}
+			class:animate-pulse={!guess && i === current}
 			on:click={() => (selected = i)}
-			disabled={i > current}
-		>
-			{guess?.name.charAt(0) || ' '}
-		</button>
+			disabled={!guess && i !== current}
+		/>
 	{/each}
 </section>
 
-<button class="w-10 text-gray-700" on:click={() => (open = true)}>
+<button class="h-10 w-10 shrink-0 text-gray-700" on:click={() => (open = true)}>
 	<UpIcon />
 </button>
 

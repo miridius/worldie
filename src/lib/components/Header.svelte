@@ -8,15 +8,13 @@
 	let settingsOpen = false;
 </script>
 
-<header class="w-full bg-white fixed top-0 z-[999]">
-	<nav class="max-w-3xl mx-auto flex justify-between items-center p-3">
-		<button on:click={() => (helpOpen = true)}><HelpIcon /></button>
+<nav class="max-w-3xl mx-auto flex justify-between items-center p-3">
+	<button on:click={() => (helpOpen = true)}><HelpIcon /></button>
 
-		<h1 class="text-3xl font-display tracking-wide uppercase">Worldie</h1>
+	<h1 class="text-3xl font-display tracking-wide uppercase">Worldie</h1>
 
-		<button on:click={() => (settingsOpen = true)}><SettingsIcon /></button>
-	</nav>
-</header>
+	<button on:click={() => (settingsOpen = true)}><SettingsIcon /></button>
+</nav>
 
 <Help bind:open={helpOpen} />
 <Settings bind:open={settingsOpen} />

@@ -2,28 +2,28 @@
 	import type { Country } from '$lib/types';
 	import Typeahead from 'svelte-typeahead';
 
-	export let countries: Country[];
-	export let guess: Country | undefined;
+	export let countryList: Country[];
+	export let guess: (country: Country) => void;
 	export let gameOver: boolean;
 	export let won: boolean;
+	export let answer: Country;
 
+	$: countryName = answer?.name.toUpperCase();
 	$: label = gameOver
 		? won
-			? `You guessed it, it's ${guess?.name.toUpperCase()}!`
-			: `It's ${guess?.name.toUpperCase()}. Better luck next time!`
+			? `You guessed it, it's ${countryName}!`
+			: `It was ${countryName}! Better luck next time.`
 		: 'Guess the country';
-
-	const extract = (ctry: Country) => ctry.name;
 </script>
 
-<div class="p-4 w-full max-w-sm">
+<div class="p-5 w-full max-w-md">
 	<Typeahead
-		data={countries}
-		{extract}
+		data={countryList}
+		extract={(ctry) => ctry.name}
 		limit={10}
 		{label}
 		placeholder={label}
-		on:select={({ detail }) => (guess = detail.original)}
+		on:select={({ detail }) => guess(detail.original)}
 		inputAfterSelect="clear"
 		disabled={gameOver}
 	/>
@@ -37,7 +37,8 @@
 
 	/* styles for the search input */
 	:global([data-svelte-typeahead] input) {
-		@apply border-0 bg-white rounded-xl placeholder:text-gray-600 placeholder:text-center !important;
+		@apply border-0 bg-white rounded-xl
+		placeholder:text-gray-600 placeholder:text-center !important;
 	}
 	:global([data-svelte-typeahead] input:not(:disabled)) {
 		@apply placeholder:text-left !important;
@@ -46,6 +47,9 @@
 		background-size: 1.5rem;
 		background-position-x: 0.5rem;
 		background-position-y: 0.55rem;
+	}
+	:global([data-svelte-typeahead] input:disabled::-webkit-search-cancel-button) {
+		@apply hidden !important;
 	}
 
 	/* styles for the results list */

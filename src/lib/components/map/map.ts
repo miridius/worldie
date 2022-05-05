@@ -1,5 +1,5 @@
 import { settings$ } from '$lib/components/settings/store';
-import { sleep } from '$lib/utils';
+import type { Country, Guess } from '$lib/types';
 import type {
 	FeatureGroup,
 	FitBoundsOptions,
@@ -13,6 +13,8 @@ import { derived } from 'svelte/store';
 const colors = {
 	sky: { '500': '#0ea5e9' },
 	red: { '500': '#ef4444' },
+	yellow: { '500': '#eab308' },
+	amber: { '500': '#f59e0b' },
 	emerald: { '500': '#10b981' },
 };
 
@@ -24,93 +26,108 @@ const style$ = derived(settings$, (s) => ({ weight: s['style.weight'], fill: s['
 // this needs to be imported dynamically because it crashes if imported on the server
 let L: typeof import('leaflet/index');
 
-type Country = { layer: GeoJSON; marker: Marker };
+type CountryLayer = { layer: GeoJSON; marker: Marker };
 
 export default class Map {
-	map!: LeafletMap;
-	targetCtry!: Country;
-	guesses: Country[] = [];
+	private map!: LeafletMap;
+	private targetLayer!: CountryLayer;
+	private guessLayers: CountryLayer[] = [];
+
+	constructor(private answer: Country, private selected: number) {}
 
 	// this logic can't be in the constructor because it is async
-	async init(elementId: string, targetCtryCode: string) {
+	async init(elementId: string) {
 		if (!L) L = await import('leaflet');
 		this.map = L.map(elementId, { attributionControl: false, zoomSnap: 0.1 });
-		const layer = await this.addCtry(targetCtryCode, colors.sky['500']);
-		this.targetCtry = { layer, marker: this.addMarker(layer, '?') };
-		this.map.fitBounds(this.targetBounds);
-		this.targetCtry.marker.openTooltip();
+		const layer = await this.addCtry(this.answer.code, colors.sky['500']);
+		this.targetLayer = { layer, marker: this.addMarker(layer, '?') };
+		this.map.fitBounds(this.targetBounds, { padding: [0, 128] });
+		this.targetLayer.marker.openTooltip();
 		return this;
 	}
 
-	get targetBounds() {
-		return this.targetCtry.layer.getBounds().pad(0.1);
+	setGuesses(guesses: Guess[]) {
+		this.renderGuesses(guesses);
+	}
+
+	setSelected(selected: number) {
+		this.selected = selected;
+		this.flyToSelected();
+	}
+
+	won() {
+		this.targetLayer.layer.setStyle({ color: '#10b981' });
+	}
+
+	gameOver() {
+		this.showFullMap();
+		this.targetLayer.marker.unbindTooltip();
+	}
+
+	private get targetBounds() {
+		return this.targetLayer.layer.getBounds().pad(0.1);
 	}
 
 	private async addCtry(ctryCode: string, color: string) {
 		const data = await fetch(`./data/${ctryCode.toLowerCase()}.geo.json`)
 			.then((res) => res.json())
 			.catch(alert);
-		// const layer = L.geoJSON(data, { style: { color, ...get(style) } }).addTo(this.map);
 		const layer = L.geoJSON(data).addTo(this.map);
 		style$.subscribe((style) => layer.setStyle({ color, ...style }));
 		return layer;
 	}
 
-	async addWrongGuess(ctryCode: string, ctryName: string) {
-		const layer = await this.addCtry(ctryCode, colors.red['500']);
-		const marker = this.addMarker(layer, ctryName);
-		this.guesses.push({ layer, marker });
-		await this.showGuess(this.guesses.length - 1);
-		await sleep(PAUSE_MS);
-		await this.showTarget();
+	private async renderGuesses(guesses: Guess[]) {
+		guesses.forEach(async (guess, i) => {
+			if (!this.guessLayers[i] && guess.code !== this.answer.code) {
+				await this.addWrongGuess(guess);
+			}
+		});
 	}
 
-	async showGuess(index: number): Promise<void> {
-		const guess = this.guesses[index];
+	private async addWrongGuess({ code, name, close }: Guess) {
+		const layer = await this.addCtry(code, close ? colors.amber[500] : colors.red['500']);
+		const marker = this.addMarker(layer, name);
+		this.guessLayers.push({ layer, marker });
+		if (this.selected === this.guessLayers.length - 1) await this.flyToSelected();
+	}
+
+	private async flyToSelected(): Promise<void> {
+		const guess = this.guessLayers[this.selected];
 		if (guess) {
-			this.targetCtry.marker.closeTooltip();
+			this.targetLayer.marker.closeTooltip();
 			const bounds = guess.layer.getBounds().pad(0.1);
 			// include the target in the frame as well but only if min zoom level supports it
 			if (this.map.getMinZoom() <= 2) bounds.extend(this.targetBounds);
 			await this.fly(bounds);
 			guess.marker.openTooltip();
-		} else if (index > 0) {
+		} else {
 			this.showTarget();
 		}
 	}
 
-	async showTarget(): Promise<void> {
-		this.targetCtry.layer.bringToFront();
+	private async showTarget(): Promise<void> {
+		this.targetLayer.layer.bringToFront();
 		this.hideAllTooltips();
 		await this.fly(this.targetBounds);
-		this.targetCtry.marker.openTooltip();
+		this.targetLayer.marker.openTooltip();
 	}
 
 	private fly(bounds: LatLngBounds, options: FitBoundsOptions = {}): Promise<void> {
 		return new Promise((resolve) => {
-			this.map.flyToBounds(bounds, { duration: FLY_MS / 1000, ...options });
+			this.map.flyToBounds(bounds, { duration: FLY_MS / 1000, padding: [0, 128], ...options });
 			this.map.once('moveend', () => resolve());
 		});
 	}
 
-	hideAllTooltips() {
-		this.guesses.forEach(({ marker }) => marker.closeTooltip());
+	private hideAllTooltips() {
+		this.guessLayers.forEach(({ marker }) => marker.closeTooltip());
 	}
 
 	private addMarker(feature: FeatureGroup, title: string) {
 		return L.marker(feature.getBounds().getCenter(), { icon: L.divIcon({ className: 'hidden' }) })
 			.addTo(this.map)
 			.bindTooltip(title);
-	}
-
-	showWin() {
-		this.targetCtry?.layer.setStyle({ color: '#10b981' }).bringToFront();
-		this.gameOver();
-	}
-
-	gameOver() {
-		this.showFullMap();
-		this.targetCtry.marker.unbindTooltip();
 	}
 
 	private showFullMap() {
