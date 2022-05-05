@@ -36,7 +36,7 @@
 <style lang="postcss">
 	/* Override zoom control styles */
 	:global(.leaflet-control-zoom) {
-		@apply flex flex-row-reverse border-0 rounded shadow-md m-4 mt-[4.75rem] !important;
+		@apply flex flex-row-reverse border-0 rounded shadow-md m-4 mt-[4.25rem] !important;
 	}
 
 	/* Override zoom control button styles -  */
