@@ -25,20 +25,31 @@
 			<p>Random play and challenge archive modes coming soon :)</p>
 		</section>
 		<div class="border-t border-black w-full" />
+		<section class="space-y-3">
+			<p>
+				You can report issues, make feature requests, or contribute to this project on <a
+					href="https://github.com/miridius/worldie"
+					rel="external">GitHub</a
+				>, or join the discussion on
+				<a href="https://t.me/+_YvCH-33niI3OWUy" rel="external">Telegram</a>
+			</p>
+		</section>
+		<div class="border-t border-black w-full" />
 		<section>
 			<p>
 				<span class="font-display font-medium">WORLDIE</span> is inspired by
-				<a
-					class="underline hover:text-green-700"
-					href="https://www.nytimes.com/games/wordle/index.html"
+				<a href="https://www.nytimes.com/games/wordle/index.html" rel="external"
+					><span class="font-display">Wordle</span></a
 				>
-					<span class="font-display">Wordle</span>
-				</a>
 				and
-				<a class="underline hover:text-green-700" href="https://worldle.teuteuf.fr/"
-					>WOR<b>L</b>DLE</a
-				>.
+				<a href="https://worldle.teuteuf.fr/" rel="external">WOR<b>L</b>DLE</a>.
 			</p>
 		</section>
 	</article>
 </FullscreenDialog>
+
+<style lang="postcss">
+	a {
+		@apply underline hover:text-green-700;
+	}
+</style>
