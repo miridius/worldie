@@ -18,8 +18,8 @@ const colors = {
 	emerald: { '500': '#10b981' },
 };
 
-let FLY_MS: number, PAUSE_MS: number;
-settings$.subscribe((v) => ({ flyTimeMs: FLY_MS, pauseTimeMs: PAUSE_MS } = v));
+let FLY_MS: number;
+settings$.subscribe((v) => ({ flyTimeMs: FLY_MS } = v));
 
 const style$ = derived(settings$, (s) => ({ weight: s['style.weight'], fill: s['style.fill'] }));
 
