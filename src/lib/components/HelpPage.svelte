@@ -21,8 +21,8 @@
 		</section>
 		<div class="border-t border-black w-full" />
 		<section class="space-y-3">
-			<p>A new country is available to guess every time you refresh the page, good luck!</p>
-			<p>Daily challenge mode coming soon :)</p>
+			<p>A new country is available to guess each day, good luck!</p>
+			<p>Random play and challenge archive modes coming soon :)</p>
 		</section>
 		<div class="border-t border-black w-full" />
 		<section>
