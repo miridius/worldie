@@ -11,3 +11,6 @@ export const memoize = <A extends unknown[], R>(f: (...a: A) => R) => {
 		return key in cache ? cache[key] : (cache[key] = f(...a));
 	};
 };
+
+// get the ISO string for a date, without the time component
+export const toIsoDate = (date: Date) => date.toISOString().split('T')[0];

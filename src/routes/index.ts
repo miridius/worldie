@@ -1,4 +1,4 @@
-import { memoize } from '$lib/utils';
+import { memoize, toIsoDate } from '$lib/utils';
 import type { RequestHandler } from '@sveltejs/kit';
 import { createHash } from 'crypto';
 import type { Countries } from 'world-countries';
@@ -23,9 +23,6 @@ const intHashOfString = (str: string) => {
 	return parseInt(hashStr, 16);
 };
 
-// get the ISO string for a date, without the time component
-const toIsoDate = (date: Date) => date.toISOString().split('T')[0];
-
 const challengeStartdate = '2022-05-07';
 
 const _selectCtryForDate = (isoDate: string, unseenCtryCodes = [...ctryCodes]) => {
@@ -44,10 +41,13 @@ const _selectCtryForDate = (isoDate: string, unseenCtryCodes = [...ctryCodes]) =
 	return unseenCtryCodes.splice(idx, 1)[0];
 };
 
-const selectCtryForDate = (date: Date) => memoize(_selectCtryForDate)(toIsoDate(date));
+const selectCtryForDate = memoize(_selectCtryForDate);
 
 export const get: RequestHandler = () => {
-	const code = selectCtryForDate(new Date());
+	const isoDate = toIsoDate(new Date());
+	const code = selectCtryForDate(isoDate);
 	const ctry = countryLookup[code];
-	return { body: { countryList, answer: { code, name: ctry.name.common }, borders: ctry.borders } };
+	return {
+		body: { isoDate, countryList, answer: { code, name: ctry.name.common }, borders: ctry.borders },
+	};
 };

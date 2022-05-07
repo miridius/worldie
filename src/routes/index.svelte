@@ -2,45 +2,16 @@
 	import CountrySearch from '$lib/components/CountrySearch.svelte';
 	import Guesses from '$lib/components/Guesses.svelte';
 	import Map from '$lib/components/map/Map.svelte';
-	import { settings$ } from '$lib/components/settings/store';
-	import type { Country, Guess } from '$lib/types';
-	import { get } from 'svelte/store';
+	import { Game$ } from '$lib/game';
+	import type { Country } from '$lib/types';
 	import Header from '../lib/components/Header.svelte';
 
+	export let isoDate: string;
 	export let countryList: Country[];
 	export let answer: Country;
 	export let borders: string[];
 
-	const maxGuesses = 6;
-
-	// @hmr:keep-all
-	let guesses: Guess[] = [];
-	let current = 0;
-	let selected = 0;
-	let won = false;
-	$: gameOver = won || current >= maxGuesses;
-
-	let timeout: NodeJS.Timeout;
-	const guess = (country?: Country) => {
-		if (!country) return;
-		const correct = country.code === answer.code;
-		const close = borders.includes(country.code);
-		selected = guesses.length;
-		guesses = [...guesses, { ...country, correct, close }];
-		if (correct) {
-			won = true;
-		} else {
-			// wait for the map to start returning to the target country then move the guess indicator
-			const { flyTimeMs, pauseTimeMs } = get(settings$);
-			if (timeout) clearTimeout(timeout);
-			timeout = setTimeout(
-				() => !gameOver && (selected = current = guesses.length),
-				flyTimeMs + pauseTimeMs,
-			);
-			// remove already guessed countries from the search list
-			countryList = countryList.filter((c) => c.code !== country?.code);
-		}
-	};
+	const game$ = new Game$(isoDate, countryList, answer, borders);
 
 	let keyboardOpen = false;
 	globalThis.visualViewport?.addEventListener('resize', () => {
@@ -57,12 +28,12 @@
 		<Header />
 	</header>
 
-	<Map {answer} {guesses} {selected} {won} {gameOver} />
+	<Map {...$game$} />
 
 	<footer class="fixed bottom-0 w-full z-[999] flex justify-center items-center portrait:flex-col">
-		<CountrySearch {countryList} {guess} {gameOver} {won} {answer} />
+		<CountrySearch {game$} />
 		{#if !keyboardOpen}
-			<Guesses {guesses} {maxGuesses} {current} bind:selected />
+			<Guesses {game$} />
 		{/if}
 	</footer>
 </main>

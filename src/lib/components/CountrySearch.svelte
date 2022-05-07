@@ -1,16 +1,12 @@
 <script lang="ts">
-	import type { Country } from '$lib/types';
+	import type { Game$ } from '$lib/game';
 	import Typeahead from 'svelte-typeahead';
 
-	export let countryList: Country[];
-	export let guess: (country: Country) => void;
-	export let gameOver: boolean;
-	export let won: boolean;
-	export let answer: Country;
+	export let game$: Game$;
 
-	$: countryName = answer?.name.toUpperCase();
-	$: label = gameOver
-		? won
+	$: countryName = $game$.answer?.name.toUpperCase();
+	$: label = $game$.gameOver
+		? $game$.won
 			? `You guessed it, it's ${countryName}!`
 			: `It's ${countryName}! Better luck next time.`
 		: 'Guess the country';
@@ -18,14 +14,14 @@
 
 <div class="p-5 w-full max-w-md">
 	<Typeahead
-		data={countryList}
+		data={$game$.countryList}
 		extract={(ctry) => ctry.name}
 		limit={10}
 		{label}
 		placeholder={label}
-		on:select={({ detail }) => guess(detail.original)}
+		on:select={({ detail }) => game$.makeGuess(detail.original)}
 		inputAfterSelect="clear"
-		disabled={gameOver}
+		disabled={$game$.gameOver}
 	/>
 </div>
 
