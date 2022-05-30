@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { Game$ } from '$lib/game';
 	import HelpPage from './HelpPage.svelte';
 	import HelpIcon from './icons/HelpIcon.svelte';
 	import MenuIcon from './icons/MenuIcon.svelte';
@@ -6,12 +7,13 @@
 	import StatsIcon from './icons/StatsIcon.svelte';
 	import MenuPage from './MenuPage.svelte';
 	import SettingsPage from './settings/SettingsPage.svelte';
-	import StatsPage from './StatsPage.svelte';
+	import StatisticsPage from './stats/StatisticsPage.svelte';
 
 	// @hmr:keep-all
+	export let game$: Game$;
 	let menuOpen = false;
 	let helpOpen = false;
-	let statsOpen = false;
+	export let statsOpen = false;
 	let settingsOpen = false;
 </script>
 
@@ -27,5 +29,5 @@
 
 <MenuPage bind:open={menuOpen} />
 <HelpPage bind:open={helpOpen} />
-<StatsPage bind:open={statsOpen} />
+<StatisticsPage bind:open={statsOpen} {game$} />
 <SettingsPage bind:open={settingsOpen} />

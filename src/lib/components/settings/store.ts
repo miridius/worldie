@@ -17,4 +17,4 @@ export const DEFAULT_SETTINGS: Settings = {
 };
 
 // Create a store that starts with either the stored value or the default.
-export const settings$ = createLocalStorageStore('settings', DEFAULT_SETTINGS);
+export const settings$ = createLocalStorageStore('settings', () => DEFAULT_SETTINGS);

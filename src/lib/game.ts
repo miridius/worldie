@@ -15,8 +15,14 @@ export class Game$ implements Readable<Game> {
 	private store$: Writable<Game>;
 	private timeout?: NodeJS.Timeout;
 
-	constructor(isoDate: string, countryList: Country[], answer: Country, borders: string[]) {
-		this.store$ = createLocalStorageStore<Game>(`${isoDate}-game`, {
+	constructor(
+		isoDate: string,
+		countryList: Country[],
+		answer: Country,
+		borders: string[],
+		private onGameOver: (game: Game) => void,
+	) {
+		this.store$ = createLocalStorageStore<Game>(`${isoDate}-game`, () => ({
 			isoDate,
 			countryList,
 			answer,
@@ -26,7 +32,7 @@ export class Game$ implements Readable<Game> {
 			selected: 0,
 			won: false,
 			gameOver: false,
-		});
+		}));
 		this.goToLatest();
 	}
 
@@ -40,7 +46,7 @@ export class Game$ implements Readable<Game> {
 			const correct = country.code === game.answer.code;
 			const close = game.borders.includes(country.code);
 			const guesses = [...game.guesses, { ...country, correct, close }];
-			return {
+			game = {
 				...game,
 				guesses,
 				selected: guesses.length - 1,
@@ -48,6 +54,8 @@ export class Game$ implements Readable<Game> {
 				gameOver: correct || guesses.length >= MAX_GUESSES,
 				countryList: game.countryList.filter((c) => c.code !== country?.code),
 			};
+			if (game.gameOver) this.onGameOver(game);
+			return game;
 		});
 		this.waitForFlight();
 	}

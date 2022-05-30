@@ -14,3 +14,5 @@ export const memoize = <A extends unknown[], R>(f: (...a: A) => R) => {
 
 // get the ISO string for a date, without the time component
 export const toIsoDate = (date: Date) => date.toISOString().split('T')[0];
+
+export const isMobile = () => !!navigator?.userAgent?.match(/android|iphone|ipad|ipod/i);
