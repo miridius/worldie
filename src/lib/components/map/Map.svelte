@@ -3,19 +3,15 @@
 </script>
 
 <script lang="ts">
-	import type { Country, Guess } from '$lib/types';
+	import type { Game$ } from '$lib/game';
 	import { onMount } from 'svelte';
 	import Map from './map';
 
-	export let answer: Country;
-	export let guesses: Guess[];
-	export let selected: number;
-	export let won: boolean;
-	export let gameOver: boolean;
+	export let game$: Game$;
 
 	const id = `map-${nextId++}`;
 
-	let map = new Map(answer, selected);
+	let map = new Map($game$.answer, $game$.selected);
 	let loading = true;
 
 	onMount(async () => {
@@ -23,10 +19,10 @@
 		loading = false;
 	});
 
-	$: if (!loading) map.setGuesses(guesses);
-	$: if (!loading) map.setSelected(selected);
-	$: if (!loading && won) map.won();
-	$: if (!loading && gameOver) map.gameOver();
+	$: if (!loading) map.setGuesses($game$.guesses);
+	$: if (!loading) map.setSelected($game$.selected);
+	$: if (!loading && $game$.won) map.won();
+	$: if (!loading && $game$.gameOver) map.gameOver();
 </script>
 
 <div class="h-full w-full flex justify-center items-center bg-transparent" {id}>
@@ -36,7 +32,7 @@
 <style lang="postcss">
 	/* Override zoom control styles */
 	:global(.leaflet-control-zoom) {
-		@apply flex flex-row-reverse border-0 rounded shadow-md m-4 mt-[4.25rem] !important;
+		@apply flex flex-row-reverse border-0 rounded shadow-md m-5 mt-[4.5rem] !important;
 	}
 
 	/* Override zoom control button styles -  */

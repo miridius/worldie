@@ -19,3 +19,11 @@ export interface Game {
 	won: boolean;
 	gameOver: boolean;
 }
+
+export interface Statistics {
+	played: number;
+	won: number;
+	streak: number;
+	maxStreak: number;
+	distribution: number[];
+}

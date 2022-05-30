@@ -14,3 +14,12 @@ export const memoize = <A extends unknown[], R>(f: (...a: A) => R) => {
 
 // get the ISO string for a date, without the time component
 export const toIsoDate = (date: Date) => date.toISOString().split('T')[0];
+
+export const isMobile = () => !!navigator?.userAgent?.match(/android|iphone|ipad|ipod/i);
+
+export const challengeStartdate = '2022-05-07';
+
+export const challengeNumber = (isoDate: string) =>
+	Math.ceil(
+		(new Date(isoDate).getTime() - new Date(challengeStartdate).getTime()) / (1000 * 60 * 60 * 24),
+	);

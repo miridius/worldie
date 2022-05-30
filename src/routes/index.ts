@@ -1,4 +1,4 @@
-import { memoize, toIsoDate } from '$lib/utils';
+import { challengeStartdate, memoize, toIsoDate } from '$lib/utils';
 import type { RequestHandler } from '@sveltejs/kit';
 import { createHash } from 'crypto';
 import type { Countries } from 'world-countries';
@@ -22,8 +22,6 @@ const intHashOfString = (str: string) => {
 	const hashStr = createHash('md5').update(str).digest('hex').substring(0, 13);
 	return parseInt(hashStr, 16);
 };
-
-const challengeStartdate = '2022-05-07';
 
 const _selectCtryForDate = (isoDate: string, unseenCtryCodes = [...ctryCodes]) => {
 	if (isoDate > challengeStartdate) {
