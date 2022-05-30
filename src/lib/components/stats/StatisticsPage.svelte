@@ -13,15 +13,13 @@
 	$: winRate = Math.round((100 * $stats$.won) / $stats$.played) || 0;
 	$: maxDist = Math.max(...$stats$.distribution);
 	$: guesses = $game$.guesses.length;
+	$: if ($game$.gameOver) open = true;
 
 	const share = async () => {
 		const data = {
 			title: 'Worldie challenge results',
 			text: `#Worldie #${$game$.isoDate} ${$game$.won ? guesses : 'X'}/6
-${$game$.guesses
-	.map((g) => (g.correct ? '🟩' : g.close ? '🟨' : '🟥'))
-	.join('')
-	.padEnd(6, '⬜')}
+${$game$.guesses.map((g) => (g.correct ? '🟩' : g.close ? '🟨' : '🟥')).join('')}
 https://worldie.app`,
 		};
 		if (isMobile() && navigator?.canShare?.(data)) {

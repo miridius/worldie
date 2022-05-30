@@ -13,14 +13,7 @@
 	export let answer: Country;
 	export let borders: string[];
 
-	const onGameOver = (game: Game) => {
-		addGameToStats(game);
-		statsOpen = true;
-	};
-
-	const game$ = new Game$(isoDate, countryList, answer, borders, onGameOver);
-
-	let statsOpen = $game$.gameOver;
+	const game$ = new Game$(isoDate, countryList, answer, borders);
 
 	let keyboardOpen = false;
 	globalThis.visualViewport?.addEventListener('resize', () => {
@@ -34,7 +27,7 @@
 
 <main class="bg-blue-100 inset-0 fixed flex flex-col items-center">
 	<header class="fixed top-0 w-full z-[999] bg-white">
-		<Header {game$} bind:statsOpen />
+		<Header {game$} />
 	</header>
 
 	<Map {game$} />

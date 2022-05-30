@@ -13,7 +13,7 @@
 	export let game$: Game$;
 	let menuOpen = false;
 	let helpOpen = false;
-	export let statsOpen = false;
+	let statsOpen = false;
 	let settingsOpen = false;
 </script>
 
@@ -29,5 +29,5 @@
 
 <MenuPage bind:open={menuOpen} />
 <HelpPage bind:open={helpOpen} />
-<StatisticsPage bind:open={statsOpen} {game$} />
+<StatisticsPage {game$} bind:open={statsOpen} />
 <SettingsPage bind:open={settingsOpen} />

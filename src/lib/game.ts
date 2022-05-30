@@ -6,6 +6,7 @@ import {
 	type Writable,
 } from 'svelte/store';
 import { settings$ } from './components/settings/store';
+import { addGameToStats } from './components/stats/store';
 import { createLocalStorageStore } from './storage';
 import type { Country, Game } from './types';
 
@@ -15,13 +16,7 @@ export class Game$ implements Readable<Game> {
 	private store$: Writable<Game>;
 	private timeout?: NodeJS.Timeout;
 
-	constructor(
-		isoDate: string,
-		countryList: Country[],
-		answer: Country,
-		borders: string[],
-		private onGameOver: (game: Game) => void,
-	) {
+	constructor(isoDate: string, countryList: Country[], answer: Country, borders: string[]) {
 		this.store$ = createLocalStorageStore<Game>(`${isoDate}-game`, () => ({
 			isoDate,
 			countryList,
@@ -54,7 +49,7 @@ export class Game$ implements Readable<Game> {
 				gameOver: correct || guesses.length >= MAX_GUESSES,
 				countryList: game.countryList.filter((c) => c.code !== country?.code),
 			};
-			if (game.gameOver) this.onGameOver(game);
+			if (game.gameOver) addGameToStats(game);
 			return game;
 		});
 		this.waitForFlight();
