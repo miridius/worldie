@@ -1,8 +1,6 @@
 import { createLocalStorageStore } from '$lib/storage';
 import type { Game, Statistics } from '$lib/types';
-import { toIsoDate } from '$lib/utils';
-
-const challengeStartdate = '2022-05-07';
+import { challengeStartdate, toIsoDate } from '$lib/utils';
 
 const addGame = (game: Game, stats: Statistics) => {
 	if (game.gameOver) {

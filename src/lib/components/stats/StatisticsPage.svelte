@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Game$ } from '$lib/game';
-	import { isMobile } from '$lib/utils';
+	import { challengeNumber, isMobile } from '$lib/utils';
 	import { Dialog, DialogTitle } from '@rgossiaux/svelte-headlessui';
 	import { fly } from 'svelte/transition';
 	import CloseIcon from '../icons/CloseIcon.svelte';
@@ -18,7 +18,9 @@
 	const share = async () => {
 		const data = {
 			title: 'Worldie challenge results',
-			text: `#Worldie #${$game$.isoDate} ${$game$.won ? guesses : 'X'}/6
+			text: `#Worldie #${challengeNumber($game$.isoDate)} (${$game$.isoDate}) ${
+				$game$.won ? guesses : 'X'
+			}/6
 ${$game$.guesses.map((g) => (g.correct ? '🟩' : g.close ? '🟨' : '🟥')).join('')}
 https://worldie.app`,
 		};
