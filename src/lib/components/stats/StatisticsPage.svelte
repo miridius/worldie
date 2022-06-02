@@ -25,7 +25,7 @@
 🌍 ${guesses
 			.map((g) => (g.correct ? '🟩' : g.close ? '🟨' : '🟥'))
 			.concat(Array(MAX_GUESSES - guesses.length).fill('⬜️'))
-			.join('')} ${won ? '🎉' : '❌'}
+			.join('')} ${won ? '🎉' : '☠️'}
 			
 https://worldie.app`;
 		const data = { title: 'Worldie challenge results', text };
