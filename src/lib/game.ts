@@ -8,7 +8,7 @@ import {
 import { settings$ } from './components/settings/store';
 import { addGameToStats } from './components/stats/store';
 import { createLocalStorageStore } from './storage';
-import type { Country, Game } from './types';
+import type { Challenge, Country, Game } from './types';
 
 export const MAX_GUESSES = 6;
 
@@ -16,7 +16,8 @@ export class Game$ implements Readable<Game> {
 	private store$: Writable<Game>;
 	private timeout?: NodeJS.Timeout;
 
-	constructor(isoDate: string, countryList: Country[], answer: Country, borders: string[]) {
+	constructor(isoDate: string, countryList: Country[], challenge: Challenge) {
+		const { borders, ...answer } = challenge;
 		this.store$ = createLocalStorageStore<Game>(`${isoDate}-game`, () => ({
 			isoDate,
 			countryList,

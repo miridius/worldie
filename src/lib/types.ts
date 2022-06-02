@@ -3,6 +3,10 @@ export interface Country {
 	code: string;
 }
 
+export interface Challenge extends Country {
+	borders: string[];
+}
+
 export interface Guess extends Country {
 	correct: boolean;
 	close: boolean;

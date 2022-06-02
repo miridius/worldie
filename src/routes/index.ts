@@ -1,3 +1,4 @@
+import type { Challenge } from '$lib/types';
 import { challengeStartdate, memoize, toIsoDate } from '$lib/utils';
 import type { RequestHandler } from '@sveltejs/kit';
 import { createHash } from 'crypto';
@@ -23,29 +24,35 @@ const intHashOfString = (str: string) => {
 	return parseInt(hashStr, 16);
 };
 
-const _selectCtryForDate = (isoDate: string, unseenCtryCodes = [...ctryCodes]) => {
+const _getAvailableChallenges = (isoDate: string, unseenCtryCodes = [...ctryCodes]) => {
+	let challenges: Partial<Record<string, Challenge>>;
 	if (isoDate > challengeStartdate) {
 		// create a new Date and step it back one day
 		const previous = new Date(isoDate);
 		previous.setDate(previous.getDate() - 1);
-		// recurse for the side effect of removing already seen countries
-		_selectCtryForDate(toIsoDate(previous), unseenCtryCodes);
+		// recursing also has the side effect of removing already seen countries
+		challenges = _getAvailableChallenges(toIsoDate(previous), unseenCtryCodes);
+	} else {
+		challenges = {};
 	}
 	if (unseenCtryCodes.length === 0) {
 		// every country has been chosen already, time to start fresh
 		unseenCtryCodes = [...ctryCodes];
 	}
 	const idx = intHashOfString(isoDate) % unseenCtryCodes.length;
-	return unseenCtryCodes.splice(idx, 1)[0];
+	const code = unseenCtryCodes.splice(idx, 1)[0];
+	const ctry = countryLookup[code];
+	challenges[isoDate] = { code, name: ctry.name.common, borders: ctry.borders };
+	return challenges;
 };
 
-const selectCtryForDate = memoize(_selectCtryForDate);
+const getAvailableChallenges = memoize(_getAvailableChallenges);
 
 export const get: RequestHandler = () => {
-	const isoDate = toIsoDate(new Date());
-	const code = selectCtryForDate(isoDate);
-	const ctry = countryLookup[code];
+	const d = new Date();
+	d.setHours(d.getHours() + 12);
+	const challenges = getAvailableChallenges(toIsoDate(d));
 	return {
-		body: { isoDate, countryList, answer: { code, name: ctry.name.common }, borders: ctry.borders },
+		body: { countryList, challenges },
 	};
 };
