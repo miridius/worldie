@@ -15,6 +15,9 @@
 	$: highlight = $game$.gameOver && ($game$.won ? $game$.guesses.length : 7);
 	$: if ($game$.gameOver) open = true;
 
+	const canShare = (data?: ShareData) =>
+		isMobile() && navigator.canShare(data) && !navigator.userAgent.match(/android.*firefox/i);
+
 	const share = async () => {
 		const { isoDate, won, guesses } = $game$;
 		const text = `#Worldie #${challengeNumber(isoDate)} (${isoDate}) ${won ? guesses.length : 'X'}/6
@@ -23,8 +26,8 @@ ${guesses
 	.concat(Array(MAX_GUESSES - guesses.length).fill('⬜️'))
 	.join('')}
 https://worldie.app`;
-		const data = { text };
-		if (isMobile() && navigator?.canShare?.(data)) {
+		const data = { title: 'Worldie challenge results', text };
+		if (canShare(data)) {
 			await navigator.share(data).catch(console.error);
 		} else {
 			navigator.clipboard.writeText(text);
