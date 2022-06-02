@@ -17,7 +17,6 @@
 
 	const share = async () => {
 		const data = {
-			title: 'Worldie challenge results',
 			text: `#Worldie #${challengeNumber($game$.isoDate)} (${$game$.isoDate}) ${
 				$game$.won ? guesses : 'X'
 			}/6
