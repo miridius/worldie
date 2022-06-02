@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Game$ } from '$lib/game';
+	import { MAX_GUESSES, type Game$ } from '$lib/game';
 	import { challengeNumber, isMobile } from '$lib/utils';
 	import { Dialog, DialogTitle } from '@rgossiaux/svelte-headlessui';
 	import { fly } from 'svelte/transition';
@@ -12,21 +12,22 @@
 
 	$: winRate = Math.round((100 * $stats$.won) / $stats$.played) || 0;
 	$: maxDist = Math.max(...$stats$.distribution);
-	$: guesses = $game$.guesses.length;
+	$: highlight = $game$.gameOver && ($game$.won ? $game$.guesses.length : 7);
 	$: if ($game$.gameOver) open = true;
 
 	const share = async () => {
-		const data = {
-			text: `#Worldie #${challengeNumber($game$.isoDate)} (${$game$.isoDate}) ${
-				$game$.won ? guesses : 'X'
-			}/6
-${$game$.guesses.map((g) => (g.correct ? '🟩' : g.close ? '🟨' : '🟥')).join('')}
-https://worldie.app`,
-		};
+		const { isoDate, won, guesses } = $game$;
+		const text = `#Worldie #${challengeNumber(isoDate)} (${isoDate}) ${won ? guesses.length : 'X'}/6
+${guesses
+	.map((g) => (g.correct ? '🟩' : g.close ? '🟨' : '🟥'))
+	.concat(Array(MAX_GUESSES - guesses.length).fill('⬜️'))
+	.join('')}
+https://worldie.app`;
+		const data = { text };
 		if (isMobile() && navigator?.canShare?.(data)) {
 			await navigator.share(data).catch(console.error);
 		} else {
-			navigator.clipboard.writeText(data.text);
+			navigator.clipboard.writeText(text);
 			alert('results copied to clipboard');
 		}
 	};
@@ -62,7 +63,7 @@ https://worldie.app`,
 			<ol class="mt-2 px-5 space-y-1.5 w-full max-w-xs">
 				{#each Array(6) as _, i}
 					{@const n = $stats$.distribution[i]}
-					{@const fill = $game$.gameOver && guesses === i + 1 ? 'bg-green-500' : 'bg-gray-300'}
+					{@const fill = i + 1 === highlight ? 'bg-green-500' : 'bg-gray-300'}
 					<li class="w-full flex text-sm">
 						<div class="w-2 text-right mr-2">{i + 1}</div>
 						<div class={`${fill} font-semibold w-4 text-center`}>{n}</div>
