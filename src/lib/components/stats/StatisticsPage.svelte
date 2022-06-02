@@ -21,10 +21,12 @@
 	const share = async () => {
 		const { isoDate, won, guesses } = $game$;
 		const text = `#Worldie #${challengeNumber(isoDate)} (${isoDate}) ${won ? guesses.length : 'X'}/6
-${guesses
-	.map((g) => (g.correct ? '🟩' : g.close ? '🟨' : '🟥'))
-	.concat(Array(MAX_GUESSES - guesses.length).fill('⬜️'))
-	.join('')}
+
+🌍 ${guesses
+			.map((g) => (g.correct ? '🟩' : g.close ? '🟨' : '🟥'))
+			.concat(Array(MAX_GUESSES - guesses.length).fill('⬜️'))
+			.join('')} ${won ? '🎉' : '☠️'}
+			
 https://worldie.app`;
 		const data = { title: 'Worldie challenge results', text };
 		if (canShare(data)) {
