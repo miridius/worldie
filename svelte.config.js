@@ -18,6 +18,11 @@ const config = {
 		methodOverride: {
 			allowed: ['PATCH', 'DELETE'],
 		},
+
+		vite: {
+			// needed for dev websocket connection to work in github codespaces
+			server: { hmr: { clientPort: 443 } },
+		},
 	},
 };
 
