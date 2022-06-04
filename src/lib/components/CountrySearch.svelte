@@ -52,6 +52,9 @@
 	:global([data-svelte-typeahead] ul) {
 		@apply top-auto bottom-full bg-white rounded-xl !important;
 	}
+	:global([data-svelte-typeahead] ul mark) {
+		@apply bg-transparent text-blue-600 font-medium !important;
+	}
 
 	/* styles for the label */
 	:global([data-svelte-search] label) {
