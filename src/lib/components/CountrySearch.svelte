@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Game$ } from '$lib/game';
 	import Typeahead from 'svelte-typeahead';
-
+	
 	export let game$: Game$;
 
 	$: countryName = $game$.answer?.name.toUpperCase();
@@ -33,7 +33,7 @@
 
 	/* styles for the search input */
 	:global([data-svelte-typeahead] input) {
-		@apply border-0 bg-white rounded-xl opacity-100
+		@apply border-0 outline-none bg-white rounded-xl opacity-100
 		placeholder:text-gray-600 placeholder:text-center !important;
 	}
 	:global([data-svelte-typeahead] input:not(:disabled)) {
