@@ -19,12 +19,12 @@
 				red.
 			</p>
 		</section>
-		<div class="border-t border-black w-full" />
+		<div class="border-t border-black dark:border-white w-full" />
 		<section class="space-y-3">
 			<p>A new country is available to guess each day, good luck!</p>
 			<p>Random play and challenge archive modes coming soon :)</p>
 		</section>
-		<div class="border-t border-black w-full" />
+		<div class="border-t border-black dark:border-white w-full" />
 		<section class="space-y-3">
 			<p>
 				You can report issues, make feature requests, or contribute to this project on <a
@@ -34,7 +34,7 @@
 				<a href="https://t.me/+_YvCH-33niI3OWUy" rel="external">Telegram</a>
 			</p>
 		</section>
-		<div class="border-t border-black w-full" />
+		<div class="border-t border-black dark:border-white w-full" />
 		<section>
 			<p>
 				<span class="font-display font-medium">WORLDIE</span> is inspired by

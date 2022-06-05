@@ -11,7 +11,8 @@
 <Dialog {open} on:close={() => (open = false)}>
 	<div
 		transition:fly={{ y: 200, duration: 250 }}
-		class="fixed inset-0 top-[3.25rem] bg-white text-black border-t border-black"
+		class="fixed inset-0 top-[3.25rem] bg-white dark:bg-black text-black dark:text-white
+		border-t border-black dark:border-white"
 	>
 		<div class="w-full max-w-3xl mx-auto flex flex-col relative">
 			<DialogTitle class="text-inherit uppercase font-medium self-center m-4 pt-0.5 text-lg">

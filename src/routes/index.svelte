@@ -28,9 +28,9 @@
 	<title>Worldie</title>
 </svelte:head>
 
-<main class="bg-blue-100 inset-0 fixed flex flex-col items-center justify-center">
+<main class="bg-blue-100 dark:bg-gray-900 inset-0 fixed flex flex-col items-center justify-center">
 	{#if game$}
-		<header class="fixed top-0 w-full z-[999] bg-white">
+		<header class="fixed top-0 w-full z-[999] bg-white dark:bg-black dark:text-white">
 			<Header {game$} />
 		</header>
 

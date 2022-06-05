@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Game$ } from '$lib/game';
 	import Typeahead from 'svelte-typeahead';
-	
+
 	export let game$: Game$;
 
 	$: countryName = $game$.answer?.name.toUpperCase();
@@ -33,8 +33,10 @@
 
 	/* styles for the search input */
 	:global([data-svelte-typeahead] input) {
-		@apply border-0 outline-none bg-white rounded-xl opacity-100
-		placeholder:text-gray-600 placeholder:text-center !important;
+		@apply border-0 outline-none bg-white dark:bg-gray-600 rounded-xl opacity-100
+		placeholder:text-gray-600 dark:placeholder:text-gray-400 placeholder:text-center
+		dark:text-white
+		!important;
 	}
 	:global([data-svelte-typeahead] input:not(:disabled)) {
 		@apply placeholder:text-left !important;
@@ -50,10 +52,18 @@
 
 	/* styles for the results list */
 	:global([data-svelte-typeahead] ul) {
-		@apply top-auto bottom-full bg-white rounded-xl !important;
+		@apply top-auto bottom-full bg-white rounded-xl
+		dark:bg-gray-600 dark:text-gray-200
+		!important;
+	}
+	:global([data-svelte-typeahead] ul .selected) {
+		@apply dark:bg-gray-700 first:rounded-t-xl last:rounded-b-xl !important;
+	}
+	:global([data-svelte-typeahead] ul li) {
+		@apply border-gray-500 !important;
 	}
 	:global([data-svelte-typeahead] ul mark) {
-		@apply bg-transparent text-blue-600 font-medium !important;
+		@apply bg-transparent text-blue-600 dark:text-blue-300 font-medium !important;
 	}
 
 	/* styles for the label */

@@ -39,8 +39,10 @@
 	:global(.leaflet-control-zoom a) {
 		/* note that first and last are swapped because of flex-row-reverse on the parent */
 		@apply rounded-none last:rounded-l first:rounded-r
-		border-0 first:border-l first:pr-0.5 first:w-8 border-gray-300
-		bg-white shadow-[inset_0_-2px_2px_rgb(0,0,0,0.06)] 
-		font-thin text-gray-700 !important;
+		border-0 first:border-l first:pr-0.5 first:w-8 border-gray-300 dark:border-gray-400
+		bg-white dark:bg-gray-600 shadow-[inset_0_-2px_2px_rgb(0,0,0,0.06)] 
+		font-thin text-gray-700
+		dark:text-gray-100 dark:hover:text-gray-200 dark:focus:text-gray-300 dark:active:text-gray-400
+		!important;
 	}
 </style>
