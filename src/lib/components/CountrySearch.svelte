@@ -33,37 +33,50 @@
 
 	/* styles for the search input */
 	:global([data-svelte-typeahead] input) {
-		@apply border-0 outline-none bg-white dark:bg-gray-600 rounded-xl opacity-100
-		placeholder:text-gray-900 dark:placeholder:text-gray-100 placeholder:text-center
-		dark:text-white
+		@apply border-0 outline-none bg-white rounded-xl opacity-100
+		placeholder:text-left placeholder:text-gray-600
+		disabled:placeholder:text-center disabled:placeholder:text-gray-900
 		!important;
 	}
+	/* styles for the search input in dark mode */
+	:global(.dark [data-svelte-typeahead] input) {
+		@apply bg-gray-600 placeholder:text-gray-300 disabled:placeholder:text-gray-100 text-white !important;
+	}
+	/* show search icon (when not disabled) */
 	:global([data-svelte-typeahead] input:not(:disabled)) {
-		@apply placeholder:text-left placeholder:text-gray-600 dark:placeholder:text-gray-300 !important;
 		padding-left: 2.5rem;
 		background: url('/images/search.svg') no-repeat left;
 		background-size: 1.5rem;
 		background-position-x: 0.5rem;
 		background-position-y: 0.55rem;
 	}
+	/* hide clear button when disabled */
 	:global([data-svelte-typeahead] input:disabled::-webkit-search-cancel-button) {
 		@apply hidden !important;
 	}
 
 	/* styles for the results list */
 	:global([data-svelte-typeahead] ul) {
-		@apply top-auto bottom-full bg-white rounded-xl
-		dark:bg-gray-600 dark:text-gray-200
-		!important;
+		@apply top-auto bottom-full bg-white rounded-xl !important;
 	}
 	:global([data-svelte-typeahead] ul .selected) {
-		@apply dark:bg-gray-700 first:rounded-t-xl last:rounded-b-xl !important;
+		@apply first:rounded-t-xl last:rounded-b-xl !important;
 	}
 	:global([data-svelte-typeahead] ul li) {
 		@apply border-gray-500 !important;
 	}
 	:global([data-svelte-typeahead] ul mark) {
-		@apply bg-transparent text-blue-600 dark:text-blue-300 font-medium !important;
+		@apply bg-transparent text-blue-600 font-medium !important;
+	}
+	/* styles for the results list in dark mode */
+	:global([data-svelte-typeahead] ul) {
+		@apply bg-gray-600 text-gray-200 !important;
+	}
+	:global([data-svelte-typeahead] ul .selected) {
+		@apply bg-gray-700 !important;
+	}
+	:global([data-svelte-typeahead] ul mark) {
+		@apply text-blue-300 !important;
 	}
 
 	/* styles for the label */
