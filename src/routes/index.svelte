@@ -6,6 +6,7 @@
 	import { Game$ } from '$lib/game';
 	import type { Challenge, Country } from '$lib/types';
 	import { toIsoDate } from '$lib/utils';
+	import { Confetti } from 'svelte-confetti';
 
 	//@hmr:keep-all
 	export let countryList: Country[];
@@ -58,3 +59,20 @@
 		</p>
 	{/if}
 </main>
+
+{#if $game$?.won}
+	<div
+		class="fixed top-[-50px] left-0 h-screen w-screen flex justify-center
+		overflow-hidden pointer-events-none"
+	>
+		<Confetti
+			x={[-5, 5]}
+			y={[0, 0.1]}
+			delay={[0, 2500]}
+			infinite
+			duration="5000"
+			amount="200"
+			fallDistance="100vh"
+		/>
+	</div>
+{/if}
