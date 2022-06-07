@@ -6,7 +6,18 @@
 
 	export let open: boolean;
 
-	const settings: { label: string; key: keyof Settings; type: 'number' | 'switch' | 'select' }[] = [
+	const settings: {
+		label: string;
+		key: keyof Settings;
+		type: 'number' | 'switch' | 'select' | 'toggle';
+		options?: string[];
+	}[] = [
+		{
+			label: 'Theme',
+			key: 'theme',
+			type: 'toggle',
+			options: ['auto', 'dark', 'light'],
+		},
 		{ label: 'Country outline width (px)', key: 'style.weight', type: 'number' },
 		{ label: 'Fill country interiors?', key: 'style.fill', type: 'switch' },
 		{ label: 'Fly to guess time (ms)', key: 'flyTimeMs', type: 'number' },

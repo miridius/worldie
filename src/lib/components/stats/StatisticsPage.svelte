@@ -43,7 +43,7 @@ https://worldie.app`;
 		transition:fly={{ y: 200, duration: 250 }}
 		class="fixed inset-0 landscape:bottom-[5rem]
 		max-w-[min(25.5rem,100%-2.5rem)] m-auto max-h-96
-		bg-white text-black rounded-md"
+		bg-white/75 dark:bg-black/75 text-black dark:text-white rounded-md"
 	>
 		<div class="w-full max-w-3xl mx-auto flex flex-col items-center relative">
 			<DialogTitle class="text-inherit uppercase font-medium self-center mt-4 pt-0.5 text-lg">
@@ -71,7 +71,7 @@ https://worldie.app`;
 					{@const fill = i + 1 === highlight ? 'bg-green-500' : 'bg-gray-300'}
 					<li class="w-full flex text-sm">
 						<div class="w-2 text-right mr-2">{i + 1}</div>
-						<div class={`${fill} font-semibold w-4 text-center`}>{n}</div>
+						<div class={`${fill} font-semibold w-4 text-center dark:text-black`}>{n}</div>
 						<div class="grow mr-0.5">
 							<div class={`${fill} h-full`} style:width={`${(n / maxDist) * 100}%`} />
 						</div>

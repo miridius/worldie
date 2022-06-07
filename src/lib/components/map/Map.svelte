@@ -35,12 +35,20 @@
 		@apply flex flex-row-reverse border-0 rounded shadow-md m-5 mt-[4.5rem] !important;
 	}
 
-	/* Override zoom control button styles -  */
+	/* Override zoom control button styles */
 	:global(.leaflet-control-zoom a) {
 		/* note that first and last are swapped because of flex-row-reverse on the parent */
 		@apply rounded-none last:rounded-l first:rounded-r
 		border-0 first:border-l first:pr-0.5 first:w-8 border-gray-300
 		bg-white shadow-[inset_0_-2px_2px_rgb(0,0,0,0.06)] 
-		font-thin text-gray-700 !important;
+		font-thin text-gray-700 hover:text-gray-600 focus:text-gray-500 active:text-gray-400
+ 		!important;
+	}
+	/* Override zoom control button styles (dark mode) */
+	:global(.dark .leaflet-control-zoom a) {
+		/* note that first and last are swapped because of flex-row-reverse on the parent */
+		@apply border-gray-400 bg-gray-600 text-gray-100 
+		hover:text-gray-200 focus:text-gray-300 active:text-gray-400
+		!important;
 	}
 </style>
