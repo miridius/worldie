@@ -34,12 +34,12 @@
 	/* styles for the search input */
 	:global([data-svelte-typeahead] input) {
 		@apply border-0 outline-none bg-white dark:bg-gray-600 rounded-xl opacity-100
-		placeholder:text-gray-600 dark:placeholder:text-gray-400 placeholder:text-center
+		placeholder:text-gray-900 dark:placeholder:text-gray-100 placeholder:text-center
 		dark:text-white
 		!important;
 	}
 	:global([data-svelte-typeahead] input:not(:disabled)) {
-		@apply placeholder:text-left !important;
+		@apply placeholder:text-left placeholder:text-gray-600 dark:placeholder:text-gray-300 !important;
 		padding-left: 2.5rem;
 		background: url('/images/search.svg') no-repeat left;
 		background-size: 1.5rem;
