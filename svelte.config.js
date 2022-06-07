@@ -21,7 +21,7 @@ const config = {
 
 		vite: {
 			// needed for dev websocket connection to work in github codespaces
-			server: { hmr: { clientPort: 443 } },
+			server: { hmr: { clientPort: process.env.CODESPACES ? 443 : undefined } },
 		},
 	},
 };
